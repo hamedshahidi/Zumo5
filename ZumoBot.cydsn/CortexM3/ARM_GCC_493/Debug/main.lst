@@ -1,0 +1,1949 @@
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"main.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	__aeabi_f2d
+  19              		.global	__aeabi_ddiv
+  20              		.global	__aeabi_d2f
+  21              		.section	.text.main,"ax",%progbits
+  22              		.align	2
+  23              		.global	main
+  24              		.thumb
+  25              		.thumb_func
+  26              		.type	main, %function
+  27              	main:
+  28              	.LFB63:
+  29              		.file 1 "main.c"
+   1:main.c        **** /**
+   2:main.c        **** * @mainpage ZumoBot Project
+   3:main.c        **** * @brief    You can make your own ZumoBot with various sensors.
+   4:main.c        **** * @details  <br><br>
+   5:main.c        ****     <p>
+   6:main.c        ****     <B>General</B><br>
+   7:main.c        ****     You will use Pololu Zumo Shields for your robot project with CY8CKIT-059(PSoC 5LP) from Cypress
+   8:main.c        ****     library has basic methods of various sensors and communications so that you can make what you w
+   9:main.c        ****     <br><br>
+  10:main.c        ****     </p>
+  11:main.c        ****     
+  12:main.c        ****     <p>
+  13:main.c        ****     <B>Sensors</B><br>
+  14:main.c        ****     &nbsp;Included: <br>
+  15:main.c        ****         &nbsp;&nbsp;&nbsp;&nbsp;LSM303D: Accelerometer & Magnetometer<br>
+  16:main.c        ****         &nbsp;&nbsp;&nbsp;&nbsp;L3GD20H: Gyroscope<br>
+  17:main.c        ****         &nbsp;&nbsp;&nbsp;&nbsp;Reflectance sensor<br>
+  18:main.c        ****         &nbsp;&nbsp;&nbsp;&nbsp;Motors
+  19:main.c        ****     &nbsp;Wii nunchuck<br>
+  20:main.c        ****     &nbsp;TSOP-2236: IR Receiver<br>
+  21:main.c        ****     &nbsp;HC-SR04: Ultrasonic sensor<br>
+  22:main.c        ****     &nbsp;APDS-9301: Ambient light sensor<br>
+  23:main.c        ****     &nbsp;IR LED <br><br><br>
+  24:main.c        ****     </p>
+  25:main.c        ****     
+  26:main.c        ****     <p>
+  27:main.c        ****     <B>Communication</B><br>
+  28:main.c        ****     I2C, UART, Serial<br>
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 2
+
+
+  29:main.c        ****     </p>
+  30:main.c        **** */
+  31:main.c        **** 
+  32:main.c        **** #include <project.h>
+  33:main.c        **** #include <stdio.h>
+  34:main.c        **** #include "Motor.h"
+  35:main.c        **** #include "Ultra.h"
+  36:main.c        **** #include "Nunchuk.h"
+  37:main.c        **** #include "Reflectance.h"
+  38:main.c        **** #include "I2C_made.h"
+  39:main.c        **** #include "Gyro.h"
+  40:main.c        **** #include "Accel_magnet.h"
+  41:main.c        **** #include "IR.h"
+  42:main.c        **** #include "Ambient.h"
+  43:main.c        **** #include "Beep.h"
+  44:main.c        **** 
+  45:main.c        **** int rread(void);
+  46:main.c        **** 
+  47:main.c        **** /**
+  48:main.c        ****  * @file    main.c
+  49:main.c        ****  * @brief   
+  50:main.c        ****  * @details  ** You should enable global interrupt for operating properly. **<br>&nbsp;&nbsp;&nbsp;
+  51:main.c        **** */
+  52:main.c        **** 
+  53:main.c        **** 
+  54:main.c        **** //battery level//
+  55:main.c        **** int main()
+  56:main.c        **** {
+  30              		.loc 1 56 0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34 0000 10B5     		push	{r4, lr}
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+  57:main.c        ****     CyGlobalIntEnable; 
+  38              		.loc 1 57 0
+  39              	@ 57 "main.c" 1
+  40 0002 62B6     		CPSIE   i
+  41              	@ 0 "" 2
+  58:main.c        ****     UART_1_Start();
+  42              		.loc 1 58 0
+  43              		.thumb
+  44 0004 FFF7FEFF 		bl	UART_1_Start
+  45              	.LVL0:
+  59:main.c        ****     ADC_Battery_Start();        
+  46              		.loc 1 59 0
+  47 0008 FFF7FEFF 		bl	ADC_Battery_Start
+  48              	.LVL1:
+  60:main.c        ****     int16 adcresult =0;
+  61:main.c        ****     float volts = 0.0;
+  62:main.c        **** 
+  63:main.c        ****     printf("\nBoot\n");
+  49              		.loc 1 63 0
+  50 000c 1648     		ldr	r0, .L5+8
+  51 000e FFF7FEFF 		bl	puts
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 3
+
+
+  52              	.LVL2:
+  64:main.c        **** 
+  65:main.c        ****     //BatteryLed_Write(1); // Switch led on 
+  66:main.c        ****     BatteryLed_Write(0); // Switch led off 
+  53              		.loc 1 66 0
+  54 0012 0020     		movs	r0, #0
+  55 0014 FFF7FEFF 		bl	BatteryLed_Write
+  56              	.LVL3:
+  57              	.L3:
+  67:main.c        ****     //uint8 button;
+  68:main.c        ****     //button = SW1_Read(); // read SW1 on pSoC board
+  69:main.c        **** 
+  70:main.c        ****     for(;;)
+  71:main.c        ****     {
+  72:main.c        ****         
+  73:main.c        ****         ADC_Battery_StartConvert();
+  58              		.loc 1 73 0
+  59 0018 FFF7FEFF 		bl	ADC_Battery_StartConvert
+  60              	.LVL4:
+  74:main.c        ****         if(ADC_Battery_IsEndConversion(ADC_Battery_WAIT_FOR_RESULT)) {   // wait for get ADC conver
+  61              		.loc 1 74 0
+  62 001c 0020     		movs	r0, #0
+  63 001e FFF7FEFF 		bl	ADC_Battery_IsEndConversion
+  64              	.LVL5:
+  65 0022 A8B1     		cbz	r0, .L2
+  75:main.c        ****             adcresult = ADC_Battery_GetResult16();
+  66              		.loc 1 75 0
+  67 0024 FFF7FEFF 		bl	ADC_Battery_GetResult16
+  68              	.LVL6:
+  69 0028 0446     		mov	r4, r0
+  70              	.LVL7:
+  76:main.c        ****             volts = ADC_Battery_CountsTo_Volts(adcresult)/(2.0/3.0);                  // convert va
+  71              		.loc 1 76 0
+  72 002a FFF7FEFF 		bl	ADC_Battery_CountsTo_Volts
+  73              	.LVL8:
+  74 002e FFF7FEFF 		bl	__aeabi_f2d
+  75              	.LVL9:
+  76 0032 0BA3     		adr	r3, .L5
+  77 0034 D3E90023 		ldrd	r2, [r3]
+  78 0038 FFF7FEFF 		bl	__aeabi_ddiv
+  79              	.LVL10:
+  80 003c FFF7FEFF 		bl	__aeabi_d2f
+  81              	.LVL11:
+  77:main.c        ****         
+  78:main.c        ****             // If you want to print value
+  79:main.c        ****             printf("%d %f\r\n",adcresult, volts);
+  82              		.loc 1 79 0
+  83 0040 FFF7FEFF 		bl	__aeabi_f2d
+  84              	.LVL12:
+  85 0044 0246     		mov	r2, r0
+  86 0046 0B46     		mov	r3, r1
+  87 0048 0848     		ldr	r0, .L5+12
+  88 004a 2146     		mov	r1, r4
+  89 004c FFF7FEFF 		bl	printf
+  90              	.LVL13:
+  91              	.L2:
+  80:main.c        ****         }
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 4
+
+
+  81:main.c        ****         CyDelay(500);
+  92              		.loc 1 81 0
+  93 0050 4FF4FA70 		mov	r0, #500
+  94 0054 FFF7FEFF 		bl	CyDelay
+  95              	.LVL14:
+  82:main.c        ****         
+  83:main.c        ****     }
+  96              		.loc 1 83 0
+  97 0058 DEE7     		b	.L3
+  98              	.L6:
+  99 005a 00BFAFF3 		.align	3
+  99      0080
+ 100              	.L5:
+ 101 0060 55555555 		.word	1431655765
+ 102 0064 5555E53F 		.word	1071994197
+ 103 0068 00000000 		.word	.LC0
+ 104 006c 08000000 		.word	.LC1
+ 105              		.cfi_endproc
+ 106              	.LFE63:
+ 107              		.size	main, .-main
+ 108              		.section	.text._write,"ax",%progbits
+ 109              		.align	2
+ 110              		.global	_write
+ 111              		.thumb
+ 112              		.thumb_func
+ 113              		.type	_write, %function
+ 114              	_write:
+ 115              	.LFB64:
+  84:main.c        ****  }   
+  85:main.c        **** //*/
+  86:main.c        **** 
+  87:main.c        **** 
+  88:main.c        **** /*//ultra sonic sensor//
+  89:main.c        **** int main()
+  90:main.c        **** {
+  91:main.c        ****     CyGlobalIntEnable; 
+  92:main.c        ****     UART_1_Start();
+  93:main.c        ****     Ultra_Start();                          // Ultra Sonic Start function
+  94:main.c        ****     while(1) {
+  95:main.c        ****         //If you want to print out the value  
+  96:main.c        ****         printf("distance = %5.0f\r\n", Ultra_GetDistance());
+  97:main.c        ****         CyDelay(1000);
+  98:main.c        ****     }
+  99:main.c        **** }   
+ 100:main.c        **** //*/
+ 101:main.c        **** 
+ 102:main.c        **** 
+ 103:main.c        **** /*//nunchuk//
+ 104:main.c        **** int main()
+ 105:main.c        **** {
+ 106:main.c        ****     CyGlobalIntEnable; 
+ 107:main.c        ****     UART_1_Start();
+ 108:main.c        ****   
+ 109:main.c        ****     nunchuk_start();
+ 110:main.c        ****     nunchuk_init();
+ 111:main.c        ****     
+ 112:main.c        ****     for(;;)
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 5
+
+
+ 113:main.c        ****     {    
+ 114:main.c        ****         nunchuk_read();
+ 115:main.c        ****     }
+ 116:main.c        **** }   
+ 117:main.c        **** //*/
+ 118:main.c        **** 
+ 119:main.c        **** 
+ 120:main.c        **** /*//IR receiver//
+ 121:main.c        **** int main()
+ 122:main.c        **** {
+ 123:main.c        ****     CyGlobalIntEnable; 
+ 124:main.c        ****     UART_1_Start();
+ 125:main.c        ****     
+ 126:main.c        ****     unsigned int IR_val; 
+ 127:main.c        ****     
+ 128:main.c        ****     for(;;)
+ 129:main.c        ****     {
+ 130:main.c        ****        IR_val = get_IR();
+ 131:main.c        ****        printf("%x\r\n\n",IR_val);
+ 132:main.c        ****     }    
+ 133:main.c        ****  }   
+ 134:main.c        **** //*/
+ 135:main.c        **** 
+ 136:main.c        **** 
+ 137:main.c        **** /*//Ambient light sensor//
+ 138:main.c        **** int main()
+ 139:main.c        **** {
+ 140:main.c        ****     CyGlobalIntEnable; 
+ 141:main.c        ****     UART_1_Start();
+ 142:main.c        ****     
+ 143:main.c        ****     I2C_Start();
+ 144:main.c        ****     
+ 145:main.c        ****     I2C_write(0x29,0x80,0x00);          // set to power down
+ 146:main.c        ****     I2C_write(0x29,0x80,0x03);          // set to power on
+ 147:main.c        ****     
+ 148:main.c        ****     for(;;)
+ 149:main.c        ****     {    
+ 150:main.c        ****         uint8 Data0Low,Data0High,Data1Low,Data1High;
+ 151:main.c        ****         Data0Low = I2C_read(0x29,CH0_L);
+ 152:main.c        ****         Data0High = I2C_read(0x29,CH0_H);
+ 153:main.c        ****         Data1Low = I2C_read(0x29,CH1_L);
+ 154:main.c        ****         Data1High = I2C_read(0x29,CH1_H);
+ 155:main.c        ****         
+ 156:main.c        ****         uint8 CH0, CH1;
+ 157:main.c        ****         CH0 = convert_raw(Data0Low,Data0High);      // combine Data0
+ 158:main.c        ****         CH1 = convert_raw(Data1Low,Data1High);      // combine Data1
+ 159:main.c        **** 
+ 160:main.c        ****         double Ch0 = CH0;
+ 161:main.c        ****         double Ch1 = CH1;
+ 162:main.c        ****         
+ 163:main.c        ****         double data = 0;
+ 164:main.c        ****         data = getLux(Ch0,Ch1);
+ 165:main.c        ****         
+ 166:main.c        ****         // If you want to print out data
+ 167:main.c        ****         //printf("%lf\r\n",data);    
+ 168:main.c        ****     }    
+ 169:main.c        ****  }   
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 6
+
+
+ 170:main.c        **** //*/
+ 171:main.c        **** 
+ 172:main.c        **** 
+ 173:main.c        **** /*//accelerometer//
+ 174:main.c        **** int main()
+ 175:main.c        **** {
+ 176:main.c        ****     CyGlobalIntEnable; 
+ 177:main.c        ****     UART_1_Start();
+ 178:main.c        ****   
+ 179:main.c        ****     I2C_Start();
+ 180:main.c        ****   
+ 181:main.c        ****     uint8 X_L_A, X_H_A, Y_L_A, Y_H_A, Z_L_A, Z_H_A;
+ 182:main.c        ****     int16 X_AXIS_A, Y_AXIS_A, Z_AXIS_A;
+ 183:main.c        ****     
+ 184:main.c        ****     I2C_write(ACCEL_MAG_ADDR, ACCEL_CTRL1_REG, 0x37);           // set accelerometer & magnetometer
+ 185:main.c        ****     I2C_write(ACCEL_MAG_ADDR, ACCEL_CTRL7_REG, 0x22);
+ 186:main.c        ****     
+ 187:main.c        ****     
+ 188:main.c        ****     for(;;)
+ 189:main.c        ****     {
+ 190:main.c        ****         //print out accelerometer output
+ 191:main.c        ****         X_L_A = I2C_read(ACCEL_MAG_ADDR, OUT_X_L_A);
+ 192:main.c        ****         X_H_A = I2C_read(ACCEL_MAG_ADDR, OUT_X_H_A);
+ 193:main.c        ****         X_AXIS_A = convert_raw(X_L_A, X_H_A);
+ 194:main.c        ****         
+ 195:main.c        ****         Y_L_A = I2C_read(ACCEL_MAG_ADDR, OUT_Y_L_A);
+ 196:main.c        ****         Y_H_A = I2C_read(ACCEL_MAG_ADDR, OUT_Y_H_A);
+ 197:main.c        ****         Y_AXIS_A = convert_raw(Y_L_A, Y_H_A);
+ 198:main.c        ****         
+ 199:main.c        ****         Z_L_A = I2C_read(ACCEL_MAG_ADDR, OUT_Z_L_A);
+ 200:main.c        ****         Z_H_A = I2C_read(ACCEL_MAG_ADDR, OUT_Z_H_A);
+ 201:main.c        ****         Z_AXIS_A = convert_raw(Z_L_A, Z_H_A);
+ 202:main.c        ****         
+ 203:main.c        ****         printf("ACCEL: %d %d %d %d %d %d \r\n", X_L_A, X_H_A, Y_L_A, Y_H_A, Z_L_A, Z_H_A);
+ 204:main.c        ****         value_convert_accel(X_AXIS_A, Y_AXIS_A, Z_AXIS_A);
+ 205:main.c        ****         printf("\n");
+ 206:main.c        ****         
+ 207:main.c        ****         CyDelay(50);
+ 208:main.c        ****     }
+ 209:main.c        **** }   
+ 210:main.c        **** //*/
+ 211:main.c        **** 
+ 212:main.c        **** 
+ 213:main.c        **** /*//reflectance//
+ 214:main.c        **** int main()
+ 215:main.c        **** {
+ 216:main.c        ****     struct sensors_ ref;
+ 217:main.c        ****     struct sensors_ dig;
+ 218:main.c        ****     CyGlobalIntEnable; 
+ 219:main.c        ****     UART_1_Start();
+ 220:main.c        ****   
+ 221:main.c        ****     sensor_isr_StartEx(sensor_isr_handler);
+ 222:main.c        ****     
+ 223:main.c        ****     reflectance_start();
+ 224:main.c        **** 
+ 225:main.c        ****     IR_led_Write(1);
+ 226:main.c        ****     for(;;)
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 7
+
+
+ 227:main.c        ****     {
+ 228:main.c        ****         reflectance_read(&ref);
+ 229:main.c        ****         printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);       //print out each period o
+ 230:main.c        ****         reflectance_digital(&dig);      //print out 0 or 1 according to results of reflectance peri
+ 231:main.c        ****         printf("%d %d %d %d \r\n", dig.l3, dig.l1, dig.r1, dig.r3);        //print out 0 or 1 accor
+ 232:main.c        ****         
+ 233:main.c        ****         CyDelay(500);
+ 234:main.c        ****     }
+ 235:main.c        **** }   
+ 236:main.c        **** //*/
+ 237:main.c        **** 
+ 238:main.c        ****  /* //motor//
+ 239:main.c        **** int main()
+ 240:main.c        **** {
+ 241:main.c        ****     CyGlobalIntEnable; 
+ 242:main.c        ****     UART_1_Start();
+ 243:main.c        **** 
+ 244:main.c        ****     motor_start();              // motor start
+ 245:main.c        **** 
+ 246:main.c        ****     motor_forward(100,2000);     // moving forward
+ 247:main.c        ****     motor_turn(200,50,2000);     // turn
+ 248:main.c        ****     motor_turn(50,200,2000);     // turn
+ 249:main.c        ****     motor_backward(100,2000);    // movinb backward
+ 250:main.c        ****        
+ 251:main.c        ****     motor_stop();               // motor stop
+ 252:main.c        ****     
+ 253:main.c        ****     for(;;)
+ 254:main.c        ****     {
+ 255:main.c        **** 
+ 256:main.c        ****     }
+ 257:main.c        **** }
+ 258:main.c        **** //*/
+ 259:main.c        ****     
+ 260:main.c        **** 
+ 261:main.c        **** /*//gyroscope//
+ 262:main.c        **** int main()
+ 263:main.c        **** {
+ 264:main.c        ****     CyGlobalIntEnable; 
+ 265:main.c        ****     UART_1_Start();
+ 266:main.c        ****   
+ 267:main.c        ****     I2C_Start();
+ 268:main.c        ****   
+ 269:main.c        ****     uint8 X_L_G, X_H_G, Y_L_G, Y_H_G, Z_L_G, Z_H_G;
+ 270:main.c        ****     int16 X_AXIS_G, Y_AXIS_G, Z_AXIS_G;
+ 271:main.c        ****     
+ 272:main.c        ****     I2C_write(GYRO_ADDR, GYRO_CTRL1_REG, 0x0F);             // set gyroscope into active mode
+ 273:main.c        ****     I2C_write(GYRO_ADDR, GYRO_CTRL4_REG, 0x30);             // set full scale selection to 2000dps 
+ 274:main.c        ****     
+ 275:main.c        ****     for(;;)
+ 276:main.c        ****     {
+ 277:main.c        ****         //print out gyroscope output
+ 278:main.c        ****         X_L_G = I2C_read(GYRO_ADDR, OUT_X_AXIS_L);
+ 279:main.c        ****         X_H_G = I2C_read(GYRO_ADDR, OUT_X_AXIS_H);
+ 280:main.c        ****         X_AXIS_G = convert_raw(X_H_G, X_L_G);
+ 281:main.c        ****         
+ 282:main.c        ****         
+ 283:main.c        ****         Y_L_G = I2C_read(GYRO_ADDR, OUT_Y_AXIS_L);
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 8
+
+
+ 284:main.c        ****         Y_H_G = I2C_read(GYRO_ADDR, OUT_Y_AXIS_H);
+ 285:main.c        ****         Y_AXIS_G = convert_raw(Y_H_G, Y_L_G);
+ 286:main.c        ****         
+ 287:main.c        ****         
+ 288:main.c        ****         Z_L_G = I2C_read(GYRO_ADDR, OUT_Z_AXIS_L);
+ 289:main.c        ****         Z_H_G = I2C_read(GYRO_ADDR, OUT_Z_AXIS_H);
+ 290:main.c        ****         Z_AXIS_G = convert_raw(Z_H_G, Z_L_G);
+ 291:main.c        ****      
+ 292:main.c        ****         // If you want to print value
+ 293:main.c        ****         printf("%d %d %d \r\n", X_AXIS_G, Y_AXIS_G, Z_AXIS_G);
+ 294:main.c        ****         CyDelay(50);
+ 295:main.c        ****     }
+ 296:main.c        **** }   
+ 297:main.c        **** //*/
+ 298:main.c        **** 
+ 299:main.c        **** 
+ 300:main.c        **** /*//magnetometer//
+ 301:main.c        **** int main()
+ 302:main.c        **** {
+ 303:main.c        ****     CyGlobalIntEnable; 
+ 304:main.c        ****     UART_1_Start();
+ 305:main.c        ****   
+ 306:main.c        ****     I2C_Start();
+ 307:main.c        ****    
+ 308:main.c        ****     uint8 X_L_M, X_H_M, Y_L_M, Y_H_M, Z_L_M, Z_H_M;
+ 309:main.c        ****     int16 X_AXIS, Y_AXIS, Z_AXIS;
+ 310:main.c        ****     
+ 311:main.c        ****     I2C_write(GYRO_ADDR, GYRO_CTRL1_REG, 0x0F);             // set gyroscope into active mode
+ 312:main.c        ****     I2C_write(GYRO_ADDR, GYRO_CTRL4_REG, 0x30);             // set full scale selection to 2000dps
+ 313:main.c        ****     I2C_write(ACCEL_MAG_ADDR, ACCEL_CTRL1_REG, 0x37);           // set accelerometer & magnetometer
+ 314:main.c        ****     I2C_write(ACCEL_MAG_ADDR, ACCEL_CTRL7_REG, 0x22);
+ 315:main.c        ****     
+ 316:main.c        ****     
+ 317:main.c        ****     for(;;)
+ 318:main.c        ****     {
+ 319:main.c        ****         X_L_M = I2C_read(ACCEL_MAG_ADDR, OUT_X_L_M);
+ 320:main.c        ****         X_H_M = I2C_read(ACCEL_MAG_ADDR, OUT_X_H_M);
+ 321:main.c        ****         X_AXIS = convert_raw(X_L_M, X_H_M);
+ 322:main.c        ****         
+ 323:main.c        ****         Y_L_M = I2C_read(ACCEL_MAG_ADDR, OUT_Y_L_M);
+ 324:main.c        ****         Y_H_M = I2C_read(ACCEL_MAG_ADDR, OUT_Y_H_M);
+ 325:main.c        ****         Y_AXIS = convert_raw(Y_L_M, Y_H_M);
+ 326:main.c        ****         
+ 327:main.c        ****         Z_L_M = I2C_read(ACCEL_MAG_ADDR, OUT_Z_L_M);
+ 328:main.c        ****         Z_H_M = I2C_read(ACCEL_MAG_ADDR, OUT_Z_H_M);
+ 329:main.c        ****         Z_AXIS = convert_raw(Z_L_M, Z_H_M);
+ 330:main.c        ****         
+ 331:main.c        ****         heading(X_AXIS, Y_AXIS);
+ 332:main.c        ****         printf("MAGNET: %d %d %d %d %d %d \r\n", X_L_M, X_H_M, Y_L_M, Y_H_M, Z_L_M, Z_H_M);
+ 333:main.c        ****         printf("%d %d %d \r\n", X_AXIS,Y_AXIS, Z_AXIS);
+ 334:main.c        ****         CyDelay(50);      
+ 335:main.c        ****     }
+ 336:main.c        **** }   
+ 337:main.c        **** //*/
+ 338:main.c        **** 
+ 339:main.c        **** 
+ 340:main.c        **** #if 0
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 9
+
+
+ 341:main.c        **** int rread(void)
+ 342:main.c        **** {
+ 343:main.c        ****     SC0_SetDriveMode(PIN_DM_STRONG);
+ 344:main.c        ****     SC0_Write(1);
+ 345:main.c        ****     CyDelayUs(10);
+ 346:main.c        ****     SC0_SetDriveMode(PIN_DM_DIG_HIZ);
+ 347:main.c        ****     Timer_1_Start();
+ 348:main.c        ****     uint16_t start = Timer_1_ReadCounter();
+ 349:main.c        ****     uint16_t end = 0;
+ 350:main.c        ****     while(!(Timer_1_ReadStatusRegister() & Timer_1_STATUS_TC)) {
+ 351:main.c        ****         if(SC0_Read() == 0 && end == 0) {
+ 352:main.c        ****             end = Timer_1_ReadCounter();
+ 353:main.c        ****         }
+ 354:main.c        ****     }
+ 355:main.c        ****     Timer_1_Stop();
+ 356:main.c        ****     
+ 357:main.c        ****     return (start - end);
+ 358:main.c        **** }
+ 359:main.c        **** #endif
+ 360:main.c        **** 
+ 361:main.c        **** /* Don't remove the functions below */
+ 362:main.c        **** int _write(int file, char *ptr, int len)
+ 363:main.c        **** {
+ 116              		.loc 1 363 0
+ 117              		.cfi_startproc
+ 118              		@ args = 0, pretend = 0, frame = 0
+ 119              		@ frame_needed = 0, uses_anonymous_args = 0
+ 120              	.LVL15:
+ 121 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 122              		.cfi_def_cfa_offset 24
+ 123              		.cfi_offset 3, -24
+ 124              		.cfi_offset 4, -20
+ 125              		.cfi_offset 5, -16
+ 126              		.cfi_offset 6, -12
+ 127              		.cfi_offset 7, -8
+ 128              		.cfi_offset 14, -4
+ 129 0002 0C46     		mov	r4, r1
+ 130 0004 1746     		mov	r7, r2
+ 131              	.LVL16:
+ 364:main.c        ****     (void)file; /* Parameter is not used, suppress unused argument warning */
+ 365:main.c        **** 	int n;
+ 366:main.c        **** 	for(n = 0; n < len; n++) {
+ 132              		.loc 1 366 0
+ 133 0006 0025     		movs	r5, #0
+ 134 0008 0BE0     		b	.L8
+ 135              	.LVL17:
+ 136              	.L10:
+ 367:main.c        ****         if(*ptr == '\n') UART_1_PutChar('\r');
+ 137              		.loc 1 367 0
+ 138 000a 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 139 000c 0A2B     		cmp	r3, #10
+ 140 000e 02D1     		bne	.L9
+ 141              		.loc 1 367 0 is_stmt 0 discriminator 1
+ 142 0010 0D20     		movs	r0, #13
+ 143 0012 FFF7FEFF 		bl	UART_1_PutChar
+ 144              	.LVL18:
+ 145              	.L9:
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 10
+
+
+ 368:main.c        **** 		UART_1_PutChar(*ptr++);
+ 146              		.loc 1 368 0 is_stmt 1 discriminator 2
+ 147 0016 661C     		adds	r6, r4, #1
+ 148              	.LVL19:
+ 149 0018 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 150 001a FFF7FEFF 		bl	UART_1_PutChar
+ 151              	.LVL20:
+ 366:main.c        ****         if(*ptr == '\n') UART_1_PutChar('\r');
+ 152              		.loc 1 366 0 discriminator 2
+ 153 001e 0135     		adds	r5, r5, #1
+ 154              	.LVL21:
+ 155              		.loc 1 368 0 discriminator 2
+ 156 0020 3446     		mov	r4, r6
+ 157              	.LVL22:
+ 158              	.L8:
+ 366:main.c        ****         if(*ptr == '\n') UART_1_PutChar('\r');
+ 159              		.loc 1 366 0 discriminator 1
+ 160 0022 BD42     		cmp	r5, r7
+ 161 0024 F1DB     		blt	.L10
+ 369:main.c        **** 	}
+ 370:main.c        **** 	return len;
+ 371:main.c        **** }
+ 162              		.loc 1 371 0
+ 163 0026 3846     		mov	r0, r7
+ 164 0028 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 165              		.cfi_endproc
+ 166              	.LFE64:
+ 167              		.size	_write, .-_write
+ 168 002a 00BF     		.section	.text._read,"ax",%progbits
+ 169              		.align	2
+ 170              		.global	_read
+ 171              		.thumb
+ 172              		.thumb_func
+ 173              		.type	_read, %function
+ 174              	_read:
+ 175              	.LFB65:
+ 372:main.c        **** 
+ 373:main.c        **** int _read (int file, char *ptr, int count)
+ 374:main.c        **** {
+ 176              		.loc 1 374 0
+ 177              		.cfi_startproc
+ 178              		@ args = 0, pretend = 0, frame = 0
+ 179              		@ frame_needed = 0, uses_anonymous_args = 0
+ 180              	.LVL23:
+ 181 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 182              		.cfi_def_cfa_offset 24
+ 183              		.cfi_offset 3, -24
+ 184              		.cfi_offset 4, -20
+ 185              		.cfi_offset 5, -16
+ 186              		.cfi_offset 6, -12
+ 187              		.cfi_offset 7, -8
+ 188              		.cfi_offset 14, -4
+ 189 0002 0F46     		mov	r7, r1
+ 190 0004 1446     		mov	r4, r2
+ 191              	.LVL24:
+ 375:main.c        ****     int chs = 0;
+ 192              		.loc 1 375 0
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 11
+
+
+ 193 0006 0026     		movs	r6, #0
+ 376:main.c        ****     char ch;
+ 377:main.c        ****  
+ 378:main.c        ****     (void)file; /* Parameter is not used, suppress unused argument warning */
+ 379:main.c        ****     while(count > 0) {
+ 194              		.loc 1 379 0
+ 195 0008 12E0     		b	.L14
+ 196              	.LVL25:
+ 197              	.L17:
+ 380:main.c        ****         ch = UART_1_GetChar();
+ 198              		.loc 1 380 0
+ 199 000a FFF7FEFF 		bl	UART_1_GetChar
+ 200              	.LVL26:
+ 381:main.c        ****         if(ch != 0) {
+ 201              		.loc 1 381 0
+ 202 000e 0546     		mov	r5, r0
+ 203 0010 70B1     		cbz	r0, .L14
+ 382:main.c        ****             UART_1_PutChar(ch);
+ 204              		.loc 1 382 0
+ 205 0012 FFF7FEFF 		bl	UART_1_PutChar
+ 206              	.LVL27:
+ 383:main.c        ****             chs++;
+ 207              		.loc 1 383 0
+ 208 0016 0136     		adds	r6, r6, #1
+ 209              	.LVL28:
+ 384:main.c        ****             if(ch == '\r') {
+ 210              		.loc 1 384 0
+ 211 0018 0D2D     		cmp	r5, #13
+ 212 001a 03D1     		bne	.L15
+ 213              	.LVL29:
+ 385:main.c        ****                 ch = '\n';
+ 386:main.c        ****                 UART_1_PutChar(ch);
+ 214              		.loc 1 386 0
+ 215 001c 0A20     		movs	r0, #10
+ 216 001e FFF7FEFF 		bl	UART_1_PutChar
+ 217              	.LVL30:
+ 385:main.c        ****                 ch = '\n';
+ 218              		.loc 1 385 0
+ 219 0022 0A25     		movs	r5, #10
+ 220              	.LVL31:
+ 221              	.L15:
+ 387:main.c        ****             }
+ 388:main.c        ****             *ptr++ = ch;
+ 222              		.loc 1 388 0
+ 223 0024 7B1C     		adds	r3, r7, #1
+ 224              	.LVL32:
+ 225 0026 3D70     		strb	r5, [r7]
+ 389:main.c        ****             count--;
+ 226              		.loc 1 389 0
+ 227 0028 013C     		subs	r4, r4, #1
+ 228              	.LVL33:
+ 390:main.c        ****             if(ch == '\n') break;
+ 229              		.loc 1 390 0
+ 230 002a 0A2D     		cmp	r5, #10
+ 231 002c 02D0     		beq	.L16
+ 388:main.c        ****             count--;
+ 232              		.loc 1 388 0
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 12
+
+
+ 233 002e 1F46     		mov	r7, r3
+ 234              	.LVL34:
+ 235              	.L14:
+ 379:main.c        ****         ch = UART_1_GetChar();
+ 236              		.loc 1 379 0
+ 237 0030 002C     		cmp	r4, #0
+ 238 0032 EADC     		bgt	.L17
+ 239              	.LVL35:
+ 240              	.L16:
+ 391:main.c        ****         }
+ 392:main.c        ****     }
+ 393:main.c        ****     return chs;
+ 394:main.c        **** }
+ 241              		.loc 1 394 0
+ 242 0034 3046     		mov	r0, r6
+ 243 0036 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 244              		.cfi_endproc
+ 245              	.LFE65:
+ 246              		.size	_read, .-_read
+ 247              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 248              		.align	2
+ 249              	.LC0:
+ 250 0000 0A426F6F 		.ascii	"\012Boot\000"
+ 250      7400
+ 251 0006 0000     		.space	2
+ 252              	.LC1:
+ 253 0008 25642025 		.ascii	"%d %f\015\012\000"
+ 253      660D0A00 
+ 254              		.text
+ 255              	.Letext0:
+ 256              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 257              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 258              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 259              		.file 5 "Generated_Source\\PSoC5/UART_1.h"
+ 260              		.file 6 "Generated_Source\\PSoC5/ADC_Battery.h"
+ 261              		.file 7 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 262              		.file 8 "Generated_Source\\PSoC5/BatteryLed.h"
+ 263              		.file 9 "Generated_Source\\PSoC5/CyLib.h"
+ 264              		.file 10 "Generated_Source\\PSoC5/core_cm3.h"
+ 265              		.file 11 "<built-in>"
+ 266              		.section	.debug_info,"",%progbits
+ 267              	.Ldebug_info0:
+ 268 0000 90030000 		.4byte	0x390
+ 269 0004 0400     		.2byte	0x4
+ 270 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 271 000a 04       		.byte	0x4
+ 272 000b 01       		.uleb128 0x1
+ 273 000c EE000000 		.4byte	.LASF37
+ 274 0010 01       		.byte	0x1
+ 275 0011 03020000 		.4byte	.LASF38
+ 276 0015 0F020000 		.4byte	.LASF39
+ 277 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 278 001d 00000000 		.4byte	0
+ 279 0021 00000000 		.4byte	.Ldebug_line0
+ 280 0025 02       		.uleb128 0x2
+ 281 0026 01       		.byte	0x1
+ 282 0027 06       		.byte	0x6
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 13
+
+
+ 283 0028 84020000 		.4byte	.LASF0
+ 284 002c 02       		.uleb128 0x2
+ 285 002d 01       		.byte	0x1
+ 286 002e 08       		.byte	0x8
+ 287 002f 55000000 		.4byte	.LASF1
+ 288 0033 02       		.uleb128 0x2
+ 289 0034 02       		.byte	0x2
+ 290 0035 05       		.byte	0x5
+ 291 0036 66020000 		.4byte	.LASF2
+ 292 003a 02       		.uleb128 0x2
+ 293 003b 02       		.byte	0x2
+ 294 003c 07       		.byte	0x7
+ 295 003d 29000000 		.4byte	.LASF3
+ 296 0041 03       		.uleb128 0x3
+ 297 0042 0D000000 		.4byte	.LASF9
+ 298 0046 02       		.byte	0x2
+ 299 0047 3F       		.byte	0x3f
+ 300 0048 4C000000 		.4byte	0x4c
+ 301 004c 02       		.uleb128 0x2
+ 302 004d 04       		.byte	0x4
+ 303 004e 05       		.byte	0x5
+ 304 004f 76020000 		.4byte	.LASF4
+ 305 0053 02       		.uleb128 0x2
+ 306 0054 04       		.byte	0x4
+ 307 0055 07       		.byte	0x7
+ 308 0056 69000000 		.4byte	.LASF5
+ 309 005a 02       		.uleb128 0x2
+ 310 005b 08       		.byte	0x8
+ 311 005c 05       		.byte	0x5
+ 312 005d E4010000 		.4byte	.LASF6
+ 313 0061 02       		.uleb128 0x2
+ 314 0062 08       		.byte	0x8
+ 315 0063 07       		.byte	0x7
+ 316 0064 D7000000 		.4byte	.LASF7
+ 317 0068 04       		.uleb128 0x4
+ 318 0069 04       		.byte	0x4
+ 319 006a 05       		.byte	0x5
+ 320 006b 696E7400 		.ascii	"int\000"
+ 321 006f 02       		.uleb128 0x2
+ 322 0070 04       		.byte	0x4
+ 323 0071 07       		.byte	0x7
+ 324 0072 B2000000 		.4byte	.LASF8
+ 325 0076 03       		.uleb128 0x3
+ 326 0077 3C000000 		.4byte	.LASF10
+ 327 007b 03       		.byte	0x3
+ 328 007c 2C       		.byte	0x2c
+ 329 007d 41000000 		.4byte	0x41
+ 330 0081 05       		.uleb128 0x5
+ 331 0082 70020000 		.4byte	.LASF11
+ 332 0086 04       		.byte	0x4
+ 333 0087 9201     		.2byte	0x192
+ 334 0089 2C000000 		.4byte	0x2c
+ 335 008d 05       		.uleb128 0x5
+ 336 008e 9C000000 		.4byte	.LASF12
+ 337 0092 04       		.byte	0x4
+ 338 0093 9401     		.2byte	0x194
+ 339 0095 53000000 		.4byte	0x53
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 14
+
+
+ 340 0099 05       		.uleb128 0x5
+ 341 009a 63000000 		.4byte	.LASF13
+ 342 009e 04       		.byte	0x4
+ 343 009f 9601     		.2byte	0x196
+ 344 00a1 33000000 		.4byte	0x33
+ 345 00a5 05       		.uleb128 0x5
+ 346 00a6 94000000 		.4byte	.LASF14
+ 347 00aa 04       		.byte	0x4
+ 348 00ab 9801     		.2byte	0x198
+ 349 00ad B1000000 		.4byte	0xb1
+ 350 00b1 02       		.uleb128 0x2
+ 351 00b2 04       		.byte	0x4
+ 352 00b3 04       		.byte	0x4
+ 353 00b4 4A000000 		.4byte	.LASF15
+ 354 00b8 02       		.uleb128 0x2
+ 355 00b9 08       		.byte	0x8
+ 356 00ba 04       		.byte	0x4
+ 357 00bb 88000000 		.4byte	.LASF16
+ 358 00bf 02       		.uleb128 0x2
+ 359 00c0 01       		.byte	0x1
+ 360 00c1 08       		.byte	0x8
+ 361 00c2 0A020000 		.4byte	.LASF17
+ 362 00c6 02       		.uleb128 0x2
+ 363 00c7 04       		.byte	0x4
+ 364 00c8 07       		.byte	0x7
+ 365 00c9 DB010000 		.4byte	.LASF18
+ 366 00cd 06       		.uleb128 0x6
+ 367 00ce 04       		.byte	0x4
+ 368 00cf BF000000 		.4byte	0xbf
+ 369 00d3 06       		.uleb128 0x6
+ 370 00d4 04       		.byte	0x4
+ 371 00d5 D9000000 		.4byte	0xd9
+ 372 00d9 07       		.uleb128 0x7
+ 373 00da BF000000 		.4byte	0xbf
+ 374 00de 02       		.uleb128 0x2
+ 375 00df 08       		.byte	0x8
+ 376 00e0 04       		.byte	0x4
+ 377 00e1 C8010000 		.4byte	.LASF19
+ 378 00e5 08       		.uleb128 0x8
+ 379 00e6 8F000000 		.4byte	.LASF40
+ 380 00ea 01       		.byte	0x1
+ 381 00eb 37       		.byte	0x37
+ 382 00ec 68000000 		.4byte	0x68
+ 383 00f0 00000000 		.4byte	.LFB63
+ 384 00f4 70000000 		.4byte	.LFE63-.LFB63
+ 385 00f8 01       		.uleb128 0x1
+ 386 00f9 9C       		.byte	0x9c
+ 387 00fa C0010000 		.4byte	0x1c0
+ 388 00fe 09       		.uleb128 0x9
+ 389 00ff 4F020000 		.4byte	.LASF20
+ 390 0103 01       		.byte	0x1
+ 391 0104 3C       		.byte	0x3c
+ 392 0105 99000000 		.4byte	0x99
+ 393 0109 00000000 		.4byte	.LLST0
+ 394 010d 09       		.uleb128 0x9
+ 395 010e C2010000 		.4byte	.LASF21
+ 396 0112 01       		.byte	0x1
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 15
+
+
+ 397 0113 3D       		.byte	0x3d
+ 398 0114 B1000000 		.4byte	0xb1
+ 399 0118 1F000000 		.4byte	.LLST1
+ 400 011c 0A       		.uleb128 0xa
+ 401 011d 08000000 		.4byte	.LVL0
+ 402 0121 DC020000 		.4byte	0x2dc
+ 403 0125 0A       		.uleb128 0xa
+ 404 0126 0C000000 		.4byte	.LVL1
+ 405 012a E3020000 		.4byte	0x2e3
+ 406 012e 0B       		.uleb128 0xb
+ 407 012f 12000000 		.4byte	.LVL2
+ 408 0133 EA020000 		.4byte	0x2ea
+ 409 0137 45010000 		.4byte	0x145
+ 410 013b 0C       		.uleb128 0xc
+ 411 013c 01       		.uleb128 0x1
+ 412 013d 50       		.byte	0x50
+ 413 013e 05       		.uleb128 0x5
+ 414 013f 03       		.byte	0x3
+ 415 0140 00000000 		.4byte	.LC0
+ 416 0144 00       		.byte	0
+ 417 0145 0B       		.uleb128 0xb
+ 418 0146 18000000 		.4byte	.LVL3
+ 419 014a 03030000 		.4byte	0x303
+ 420 014e 58010000 		.4byte	0x158
+ 421 0152 0C       		.uleb128 0xc
+ 422 0153 01       		.uleb128 0x1
+ 423 0154 50       		.byte	0x50
+ 424 0155 01       		.uleb128 0x1
+ 425 0156 30       		.byte	0x30
+ 426 0157 00       		.byte	0
+ 427 0158 0A       		.uleb128 0xa
+ 428 0159 1C000000 		.4byte	.LVL4
+ 429 015d 14030000 		.4byte	0x314
+ 430 0161 0B       		.uleb128 0xb
+ 431 0162 22000000 		.4byte	.LVL5
+ 432 0166 1B030000 		.4byte	0x31b
+ 433 016a 74010000 		.4byte	0x174
+ 434 016e 0C       		.uleb128 0xc
+ 435 016f 01       		.uleb128 0x1
+ 436 0170 50       		.byte	0x50
+ 437 0171 01       		.uleb128 0x1
+ 438 0172 30       		.byte	0x30
+ 439 0173 00       		.byte	0
+ 440 0174 0A       		.uleb128 0xa
+ 441 0175 28000000 		.4byte	.LVL6
+ 442 0179 30030000 		.4byte	0x330
+ 443 017d 0B       		.uleb128 0xb
+ 444 017e 2E000000 		.4byte	.LVL8
+ 445 0182 3B030000 		.4byte	0x33b
+ 446 0186 91010000 		.4byte	0x191
+ 447 018a 0C       		.uleb128 0xc
+ 448 018b 01       		.uleb128 0x1
+ 449 018c 50       		.byte	0x50
+ 450 018d 02       		.uleb128 0x2
+ 451 018e 74       		.byte	0x74
+ 452 018f 00       		.sleb128 0
+ 453 0190 00       		.byte	0
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 16
+
+
+ 454 0191 0B       		.uleb128 0xb
+ 455 0192 50000000 		.4byte	.LVL13
+ 456 0196 50030000 		.4byte	0x350
+ 457 019a AE010000 		.4byte	0x1ae
+ 458 019e 0C       		.uleb128 0xc
+ 459 019f 01       		.uleb128 0x1
+ 460 01a0 51       		.byte	0x51
+ 461 01a1 02       		.uleb128 0x2
+ 462 01a2 74       		.byte	0x74
+ 463 01a3 00       		.sleb128 0
+ 464 01a4 0C       		.uleb128 0xc
+ 465 01a5 01       		.uleb128 0x1
+ 466 01a6 50       		.byte	0x50
+ 467 01a7 05       		.uleb128 0x5
+ 468 01a8 03       		.byte	0x3
+ 469 01a9 08000000 		.4byte	.LC1
+ 470 01ad 00       		.byte	0
+ 471 01ae 0D       		.uleb128 0xd
+ 472 01af 58000000 		.4byte	.LVL14
+ 473 01b3 66030000 		.4byte	0x366
+ 474 01b7 0C       		.uleb128 0xc
+ 475 01b8 01       		.uleb128 0x1
+ 476 01b9 50       		.byte	0x50
+ 477 01ba 03       		.uleb128 0x3
+ 478 01bb 0A       		.byte	0xa
+ 479 01bc F401     		.2byte	0x1f4
+ 480 01be 00       		.byte	0
+ 481 01bf 00       		.byte	0
+ 482 01c0 0E       		.uleb128 0xe
+ 483 01c1 D4010000 		.4byte	.LASF23
+ 484 01c5 01       		.byte	0x1
+ 485 01c6 6A01     		.2byte	0x16a
+ 486 01c8 68000000 		.4byte	0x68
+ 487 01cc 00000000 		.4byte	.LFB64
+ 488 01d0 2A000000 		.4byte	.LFE64-.LFB64
+ 489 01d4 01       		.uleb128 0x1
+ 490 01d5 9C       		.byte	0x9c
+ 491 01d6 35020000 		.4byte	0x235
+ 492 01da 0F       		.uleb128 0xf
+ 493 01db 50000000 		.4byte	.LASF22
+ 494 01df 01       		.byte	0x1
+ 495 01e0 6A01     		.2byte	0x16a
+ 496 01e2 68000000 		.4byte	0x68
+ 497 01e6 42000000 		.4byte	.LLST2
+ 498 01ea 10       		.uleb128 0x10
+ 499 01eb 70747200 		.ascii	"ptr\000"
+ 500 01ef 01       		.byte	0x1
+ 501 01f0 6A01     		.2byte	0x16a
+ 502 01f2 CD000000 		.4byte	0xcd
+ 503 01f6 63000000 		.4byte	.LLST3
+ 504 01fa 10       		.uleb128 0x10
+ 505 01fb 6C656E00 		.ascii	"len\000"
+ 506 01ff 01       		.byte	0x1
+ 507 0200 6A01     		.2byte	0x16a
+ 508 0202 68000000 		.4byte	0x68
+ 509 0206 97000000 		.4byte	.LLST4
+ 510 020a 11       		.uleb128 0x11
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 17
+
+
+ 511 020b 6E00     		.ascii	"n\000"
+ 512 020d 01       		.byte	0x1
+ 513 020e 6D01     		.2byte	0x16d
+ 514 0210 68000000 		.4byte	0x68
+ 515 0214 B5000000 		.4byte	.LLST5
+ 516 0218 0B       		.uleb128 0xb
+ 517 0219 16000000 		.4byte	.LVL18
+ 518 021d 77030000 		.4byte	0x377
+ 519 0221 2B020000 		.4byte	0x22b
+ 520 0225 0C       		.uleb128 0xc
+ 521 0226 01       		.uleb128 0x1
+ 522 0227 50       		.byte	0x50
+ 523 0228 01       		.uleb128 0x1
+ 524 0229 3D       		.byte	0x3d
+ 525 022a 00       		.byte	0
+ 526 022b 0A       		.uleb128 0xa
+ 527 022c 1E000000 		.4byte	.LVL20
+ 528 0230 77030000 		.4byte	0x377
+ 529 0234 00       		.byte	0
+ 530 0235 0E       		.uleb128 0xe
+ 531 0236 44000000 		.4byte	.LASF24
+ 532 023a 01       		.byte	0x1
+ 533 023b 7501     		.2byte	0x175
+ 534 023d 68000000 		.4byte	0x68
+ 535 0241 00000000 		.4byte	.LFB65
+ 536 0245 38000000 		.4byte	.LFE65-.LFB65
+ 537 0249 01       		.uleb128 0x1
+ 538 024a 9C       		.byte	0x9c
+ 539 024b CB020000 		.4byte	0x2cb
+ 540 024f 0F       		.uleb128 0xf
+ 541 0250 50000000 		.4byte	.LASF22
+ 542 0254 01       		.byte	0x1
+ 543 0255 7501     		.2byte	0x175
+ 544 0257 68000000 		.4byte	0x68
+ 545 025b D4000000 		.4byte	.LLST6
+ 546 025f 10       		.uleb128 0x10
+ 547 0260 70747200 		.ascii	"ptr\000"
+ 548 0264 01       		.byte	0x1
+ 549 0265 7501     		.2byte	0x175
+ 550 0267 CD000000 		.4byte	0xcd
+ 551 026b F5000000 		.4byte	.LLST7
+ 552 026f 0F       		.uleb128 0xf
+ 553 0270 60020000 		.4byte	.LASF25
+ 554 0274 01       		.byte	0x1
+ 555 0275 7501     		.2byte	0x175
+ 556 0277 68000000 		.4byte	0x68
+ 557 027b 29010000 		.4byte	.LLST8
+ 558 027f 11       		.uleb128 0x11
+ 559 0280 63687300 		.ascii	"chs\000"
+ 560 0284 01       		.byte	0x1
+ 561 0285 7701     		.2byte	0x177
+ 562 0287 68000000 		.4byte	0x68
+ 563 028b 47010000 		.4byte	.LLST9
+ 564 028f 11       		.uleb128 0x11
+ 565 0290 636800   		.ascii	"ch\000"
+ 566 0293 01       		.byte	0x1
+ 567 0294 7801     		.2byte	0x178
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 18
+
+
+ 568 0296 BF000000 		.4byte	0xbf
+ 569 029a 66010000 		.4byte	.LLST10
+ 570 029e 0A       		.uleb128 0xa
+ 571 029f 0E000000 		.4byte	.LVL26
+ 572 02a3 88030000 		.4byte	0x388
+ 573 02a7 0B       		.uleb128 0xb
+ 574 02a8 16000000 		.4byte	.LVL27
+ 575 02ac 77030000 		.4byte	0x377
+ 576 02b0 BB020000 		.4byte	0x2bb
+ 577 02b4 0C       		.uleb128 0xc
+ 578 02b5 01       		.uleb128 0x1
+ 579 02b6 50       		.byte	0x50
+ 580 02b7 02       		.uleb128 0x2
+ 581 02b8 75       		.byte	0x75
+ 582 02b9 00       		.sleb128 0
+ 583 02ba 00       		.byte	0
+ 584 02bb 0D       		.uleb128 0xd
+ 585 02bc 22000000 		.4byte	.LVL30
+ 586 02c0 77030000 		.4byte	0x377
+ 587 02c4 0C       		.uleb128 0xc
+ 588 02c5 01       		.uleb128 0x1
+ 589 02c6 50       		.byte	0x50
+ 590 02c7 01       		.uleb128 0x1
+ 591 02c8 3A       		.byte	0x3a
+ 592 02c9 00       		.byte	0
+ 593 02ca 00       		.byte	0
+ 594 02cb 12       		.uleb128 0x12
+ 595 02cc 7B000000 		.4byte	.LASF41
+ 596 02d0 0A       		.byte	0xa
+ 597 02d1 9606     		.2byte	0x696
+ 598 02d3 D7020000 		.4byte	0x2d7
+ 599 02d7 13       		.uleb128 0x13
+ 600 02d8 76000000 		.4byte	0x76
+ 601 02dc 14       		.uleb128 0x14
+ 602 02dd 00000000 		.4byte	.LASF26
+ 603 02e1 05       		.byte	0x5
+ 604 02e2 54       		.byte	0x54
+ 605 02e3 14       		.uleb128 0x14
+ 606 02e4 17000000 		.4byte	.LASF27
+ 607 02e8 06       		.byte	0x6
+ 608 02e9 34       		.byte	0x34
+ 609 02ea 15       		.uleb128 0x15
+ 610 02eb B3010000 		.4byte	.LASF42
+ 611 02ef 0B       		.byte	0xb
+ 612 02f0 00       		.byte	0
+ 613 02f1 7F020000 		.4byte	.LASF43
+ 614 02f5 68000000 		.4byte	0x68
+ 615 02f9 03030000 		.4byte	0x303
+ 616 02fd 16       		.uleb128 0x16
+ 617 02fe D3000000 		.4byte	0xd3
+ 618 0302 00       		.byte	0
+ 619 0303 17       		.uleb128 0x17
+ 620 0304 F2010000 		.4byte	.LASF32
+ 621 0308 08       		.byte	0x8
+ 622 0309 26       		.byte	0x26
+ 623 030a 14030000 		.4byte	0x314
+ 624 030e 16       		.uleb128 0x16
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 19
+
+
+ 625 030f 81000000 		.4byte	0x81
+ 626 0313 00       		.byte	0
+ 627 0314 14       		.uleb128 0x14
+ 628 0315 90020000 		.4byte	.LASF28
+ 629 0319 06       		.byte	0x6
+ 630 031a D1       		.byte	0xd1
+ 631 031b 18       		.uleb128 0x18
+ 632 031c 97010000 		.4byte	.LASF29
+ 633 0320 06       		.byte	0x6
+ 634 0321 39       		.byte	0x39
+ 635 0322 81000000 		.4byte	0x81
+ 636 0326 30030000 		.4byte	0x330
+ 637 032a 16       		.uleb128 0x16
+ 638 032b 81000000 		.4byte	0x81
+ 639 032f 00       		.byte	0
+ 640 0330 19       		.uleb128 0x19
+ 641 0331 BF000000 		.4byte	.LASF35
+ 642 0335 06       		.byte	0x6
+ 643 0336 3B       		.byte	0x3b
+ 644 0337 99000000 		.4byte	0x99
+ 645 033b 18       		.uleb128 0x18
+ 646 033c 7C010000 		.4byte	.LASF30
+ 647 0340 06       		.byte	0x6
+ 648 0341 41       		.byte	0x41
+ 649 0342 A5000000 		.4byte	0xa5
+ 650 0346 50030000 		.4byte	0x350
+ 651 034a 16       		.uleb128 0x16
+ 652 034b 99000000 		.4byte	0x99
+ 653 034f 00       		.byte	0
+ 654 0350 18       		.uleb128 0x18
+ 655 0351 59020000 		.4byte	.LASF31
+ 656 0355 07       		.byte	0x7
+ 657 0356 B2       		.byte	0xb2
+ 658 0357 68000000 		.4byte	0x68
+ 659 035b 66030000 		.4byte	0x366
+ 660 035f 16       		.uleb128 0x16
+ 661 0360 D3000000 		.4byte	0xd3
+ 662 0364 1A       		.uleb128 0x1a
+ 663 0365 00       		.byte	0
+ 664 0366 17       		.uleb128 0x17
+ 665 0367 A9020000 		.4byte	.LASF33
+ 666 036b 09       		.byte	0x9
+ 667 036c 76       		.byte	0x76
+ 668 036d 77030000 		.4byte	0x377
+ 669 0371 16       		.uleb128 0x16
+ 670 0372 8D000000 		.4byte	0x8d
+ 671 0376 00       		.byte	0
+ 672 0377 17       		.uleb128 0x17
+ 673 0378 A3000000 		.4byte	.LASF34
+ 674 037c 05       		.byte	0x5
+ 675 037d 8A       		.byte	0x8a
+ 676 037e 88030000 		.4byte	0x388
+ 677 0382 16       		.uleb128 0x16
+ 678 0383 81000000 		.4byte	0x81
+ 679 0387 00       		.byte	0
+ 680 0388 19       		.uleb128 0x19
+ 681 0389 B1020000 		.4byte	.LASF36
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 20
+
+
+ 682 038d 05       		.byte	0x5
+ 683 038e 71       		.byte	0x71
+ 684 038f 81000000 		.4byte	0x81
+ 685 0393 00       		.byte	0
+ 686              		.section	.debug_abbrev,"",%progbits
+ 687              	.Ldebug_abbrev0:
+ 688 0000 01       		.uleb128 0x1
+ 689 0001 11       		.uleb128 0x11
+ 690 0002 01       		.byte	0x1
+ 691 0003 25       		.uleb128 0x25
+ 692 0004 0E       		.uleb128 0xe
+ 693 0005 13       		.uleb128 0x13
+ 694 0006 0B       		.uleb128 0xb
+ 695 0007 03       		.uleb128 0x3
+ 696 0008 0E       		.uleb128 0xe
+ 697 0009 1B       		.uleb128 0x1b
+ 698 000a 0E       		.uleb128 0xe
+ 699 000b 55       		.uleb128 0x55
+ 700 000c 17       		.uleb128 0x17
+ 701 000d 11       		.uleb128 0x11
+ 702 000e 01       		.uleb128 0x1
+ 703 000f 10       		.uleb128 0x10
+ 704 0010 17       		.uleb128 0x17
+ 705 0011 00       		.byte	0
+ 706 0012 00       		.byte	0
+ 707 0013 02       		.uleb128 0x2
+ 708 0014 24       		.uleb128 0x24
+ 709 0015 00       		.byte	0
+ 710 0016 0B       		.uleb128 0xb
+ 711 0017 0B       		.uleb128 0xb
+ 712 0018 3E       		.uleb128 0x3e
+ 713 0019 0B       		.uleb128 0xb
+ 714 001a 03       		.uleb128 0x3
+ 715 001b 0E       		.uleb128 0xe
+ 716 001c 00       		.byte	0
+ 717 001d 00       		.byte	0
+ 718 001e 03       		.uleb128 0x3
+ 719 001f 16       		.uleb128 0x16
+ 720 0020 00       		.byte	0
+ 721 0021 03       		.uleb128 0x3
+ 722 0022 0E       		.uleb128 0xe
+ 723 0023 3A       		.uleb128 0x3a
+ 724 0024 0B       		.uleb128 0xb
+ 725 0025 3B       		.uleb128 0x3b
+ 726 0026 0B       		.uleb128 0xb
+ 727 0027 49       		.uleb128 0x49
+ 728 0028 13       		.uleb128 0x13
+ 729 0029 00       		.byte	0
+ 730 002a 00       		.byte	0
+ 731 002b 04       		.uleb128 0x4
+ 732 002c 24       		.uleb128 0x24
+ 733 002d 00       		.byte	0
+ 734 002e 0B       		.uleb128 0xb
+ 735 002f 0B       		.uleb128 0xb
+ 736 0030 3E       		.uleb128 0x3e
+ 737 0031 0B       		.uleb128 0xb
+ 738 0032 03       		.uleb128 0x3
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 21
+
+
+ 739 0033 08       		.uleb128 0x8
+ 740 0034 00       		.byte	0
+ 741 0035 00       		.byte	0
+ 742 0036 05       		.uleb128 0x5
+ 743 0037 16       		.uleb128 0x16
+ 744 0038 00       		.byte	0
+ 745 0039 03       		.uleb128 0x3
+ 746 003a 0E       		.uleb128 0xe
+ 747 003b 3A       		.uleb128 0x3a
+ 748 003c 0B       		.uleb128 0xb
+ 749 003d 3B       		.uleb128 0x3b
+ 750 003e 05       		.uleb128 0x5
+ 751 003f 49       		.uleb128 0x49
+ 752 0040 13       		.uleb128 0x13
+ 753 0041 00       		.byte	0
+ 754 0042 00       		.byte	0
+ 755 0043 06       		.uleb128 0x6
+ 756 0044 0F       		.uleb128 0xf
+ 757 0045 00       		.byte	0
+ 758 0046 0B       		.uleb128 0xb
+ 759 0047 0B       		.uleb128 0xb
+ 760 0048 49       		.uleb128 0x49
+ 761 0049 13       		.uleb128 0x13
+ 762 004a 00       		.byte	0
+ 763 004b 00       		.byte	0
+ 764 004c 07       		.uleb128 0x7
+ 765 004d 26       		.uleb128 0x26
+ 766 004e 00       		.byte	0
+ 767 004f 49       		.uleb128 0x49
+ 768 0050 13       		.uleb128 0x13
+ 769 0051 00       		.byte	0
+ 770 0052 00       		.byte	0
+ 771 0053 08       		.uleb128 0x8
+ 772 0054 2E       		.uleb128 0x2e
+ 773 0055 01       		.byte	0x1
+ 774 0056 3F       		.uleb128 0x3f
+ 775 0057 19       		.uleb128 0x19
+ 776 0058 03       		.uleb128 0x3
+ 777 0059 0E       		.uleb128 0xe
+ 778 005a 3A       		.uleb128 0x3a
+ 779 005b 0B       		.uleb128 0xb
+ 780 005c 3B       		.uleb128 0x3b
+ 781 005d 0B       		.uleb128 0xb
+ 782 005e 49       		.uleb128 0x49
+ 783 005f 13       		.uleb128 0x13
+ 784 0060 11       		.uleb128 0x11
+ 785 0061 01       		.uleb128 0x1
+ 786 0062 12       		.uleb128 0x12
+ 787 0063 06       		.uleb128 0x6
+ 788 0064 40       		.uleb128 0x40
+ 789 0065 18       		.uleb128 0x18
+ 790 0066 9642     		.uleb128 0x2116
+ 791 0068 19       		.uleb128 0x19
+ 792 0069 01       		.uleb128 0x1
+ 793 006a 13       		.uleb128 0x13
+ 794 006b 00       		.byte	0
+ 795 006c 00       		.byte	0
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 22
+
+
+ 796 006d 09       		.uleb128 0x9
+ 797 006e 34       		.uleb128 0x34
+ 798 006f 00       		.byte	0
+ 799 0070 03       		.uleb128 0x3
+ 800 0071 0E       		.uleb128 0xe
+ 801 0072 3A       		.uleb128 0x3a
+ 802 0073 0B       		.uleb128 0xb
+ 803 0074 3B       		.uleb128 0x3b
+ 804 0075 0B       		.uleb128 0xb
+ 805 0076 49       		.uleb128 0x49
+ 806 0077 13       		.uleb128 0x13
+ 807 0078 02       		.uleb128 0x2
+ 808 0079 17       		.uleb128 0x17
+ 809 007a 00       		.byte	0
+ 810 007b 00       		.byte	0
+ 811 007c 0A       		.uleb128 0xa
+ 812 007d 898201   		.uleb128 0x4109
+ 813 0080 00       		.byte	0
+ 814 0081 11       		.uleb128 0x11
+ 815 0082 01       		.uleb128 0x1
+ 816 0083 31       		.uleb128 0x31
+ 817 0084 13       		.uleb128 0x13
+ 818 0085 00       		.byte	0
+ 819 0086 00       		.byte	0
+ 820 0087 0B       		.uleb128 0xb
+ 821 0088 898201   		.uleb128 0x4109
+ 822 008b 01       		.byte	0x1
+ 823 008c 11       		.uleb128 0x11
+ 824 008d 01       		.uleb128 0x1
+ 825 008e 31       		.uleb128 0x31
+ 826 008f 13       		.uleb128 0x13
+ 827 0090 01       		.uleb128 0x1
+ 828 0091 13       		.uleb128 0x13
+ 829 0092 00       		.byte	0
+ 830 0093 00       		.byte	0
+ 831 0094 0C       		.uleb128 0xc
+ 832 0095 8A8201   		.uleb128 0x410a
+ 833 0098 00       		.byte	0
+ 834 0099 02       		.uleb128 0x2
+ 835 009a 18       		.uleb128 0x18
+ 836 009b 9142     		.uleb128 0x2111
+ 837 009d 18       		.uleb128 0x18
+ 838 009e 00       		.byte	0
+ 839 009f 00       		.byte	0
+ 840 00a0 0D       		.uleb128 0xd
+ 841 00a1 898201   		.uleb128 0x4109
+ 842 00a4 01       		.byte	0x1
+ 843 00a5 11       		.uleb128 0x11
+ 844 00a6 01       		.uleb128 0x1
+ 845 00a7 31       		.uleb128 0x31
+ 846 00a8 13       		.uleb128 0x13
+ 847 00a9 00       		.byte	0
+ 848 00aa 00       		.byte	0
+ 849 00ab 0E       		.uleb128 0xe
+ 850 00ac 2E       		.uleb128 0x2e
+ 851 00ad 01       		.byte	0x1
+ 852 00ae 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 23
+
+
+ 853 00af 19       		.uleb128 0x19
+ 854 00b0 03       		.uleb128 0x3
+ 855 00b1 0E       		.uleb128 0xe
+ 856 00b2 3A       		.uleb128 0x3a
+ 857 00b3 0B       		.uleb128 0xb
+ 858 00b4 3B       		.uleb128 0x3b
+ 859 00b5 05       		.uleb128 0x5
+ 860 00b6 27       		.uleb128 0x27
+ 861 00b7 19       		.uleb128 0x19
+ 862 00b8 49       		.uleb128 0x49
+ 863 00b9 13       		.uleb128 0x13
+ 864 00ba 11       		.uleb128 0x11
+ 865 00bb 01       		.uleb128 0x1
+ 866 00bc 12       		.uleb128 0x12
+ 867 00bd 06       		.uleb128 0x6
+ 868 00be 40       		.uleb128 0x40
+ 869 00bf 18       		.uleb128 0x18
+ 870 00c0 9742     		.uleb128 0x2117
+ 871 00c2 19       		.uleb128 0x19
+ 872 00c3 01       		.uleb128 0x1
+ 873 00c4 13       		.uleb128 0x13
+ 874 00c5 00       		.byte	0
+ 875 00c6 00       		.byte	0
+ 876 00c7 0F       		.uleb128 0xf
+ 877 00c8 05       		.uleb128 0x5
+ 878 00c9 00       		.byte	0
+ 879 00ca 03       		.uleb128 0x3
+ 880 00cb 0E       		.uleb128 0xe
+ 881 00cc 3A       		.uleb128 0x3a
+ 882 00cd 0B       		.uleb128 0xb
+ 883 00ce 3B       		.uleb128 0x3b
+ 884 00cf 05       		.uleb128 0x5
+ 885 00d0 49       		.uleb128 0x49
+ 886 00d1 13       		.uleb128 0x13
+ 887 00d2 02       		.uleb128 0x2
+ 888 00d3 17       		.uleb128 0x17
+ 889 00d4 00       		.byte	0
+ 890 00d5 00       		.byte	0
+ 891 00d6 10       		.uleb128 0x10
+ 892 00d7 05       		.uleb128 0x5
+ 893 00d8 00       		.byte	0
+ 894 00d9 03       		.uleb128 0x3
+ 895 00da 08       		.uleb128 0x8
+ 896 00db 3A       		.uleb128 0x3a
+ 897 00dc 0B       		.uleb128 0xb
+ 898 00dd 3B       		.uleb128 0x3b
+ 899 00de 05       		.uleb128 0x5
+ 900 00df 49       		.uleb128 0x49
+ 901 00e0 13       		.uleb128 0x13
+ 902 00e1 02       		.uleb128 0x2
+ 903 00e2 17       		.uleb128 0x17
+ 904 00e3 00       		.byte	0
+ 905 00e4 00       		.byte	0
+ 906 00e5 11       		.uleb128 0x11
+ 907 00e6 34       		.uleb128 0x34
+ 908 00e7 00       		.byte	0
+ 909 00e8 03       		.uleb128 0x3
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 24
+
+
+ 910 00e9 08       		.uleb128 0x8
+ 911 00ea 3A       		.uleb128 0x3a
+ 912 00eb 0B       		.uleb128 0xb
+ 913 00ec 3B       		.uleb128 0x3b
+ 914 00ed 05       		.uleb128 0x5
+ 915 00ee 49       		.uleb128 0x49
+ 916 00ef 13       		.uleb128 0x13
+ 917 00f0 02       		.uleb128 0x2
+ 918 00f1 17       		.uleb128 0x17
+ 919 00f2 00       		.byte	0
+ 920 00f3 00       		.byte	0
+ 921 00f4 12       		.uleb128 0x12
+ 922 00f5 34       		.uleb128 0x34
+ 923 00f6 00       		.byte	0
+ 924 00f7 03       		.uleb128 0x3
+ 925 00f8 0E       		.uleb128 0xe
+ 926 00f9 3A       		.uleb128 0x3a
+ 927 00fa 0B       		.uleb128 0xb
+ 928 00fb 3B       		.uleb128 0x3b
+ 929 00fc 05       		.uleb128 0x5
+ 930 00fd 49       		.uleb128 0x49
+ 931 00fe 13       		.uleb128 0x13
+ 932 00ff 3F       		.uleb128 0x3f
+ 933 0100 19       		.uleb128 0x19
+ 934 0101 3C       		.uleb128 0x3c
+ 935 0102 19       		.uleb128 0x19
+ 936 0103 00       		.byte	0
+ 937 0104 00       		.byte	0
+ 938 0105 13       		.uleb128 0x13
+ 939 0106 35       		.uleb128 0x35
+ 940 0107 00       		.byte	0
+ 941 0108 49       		.uleb128 0x49
+ 942 0109 13       		.uleb128 0x13
+ 943 010a 00       		.byte	0
+ 944 010b 00       		.byte	0
+ 945 010c 14       		.uleb128 0x14
+ 946 010d 2E       		.uleb128 0x2e
+ 947 010e 00       		.byte	0
+ 948 010f 3F       		.uleb128 0x3f
+ 949 0110 19       		.uleb128 0x19
+ 950 0111 03       		.uleb128 0x3
+ 951 0112 0E       		.uleb128 0xe
+ 952 0113 3A       		.uleb128 0x3a
+ 953 0114 0B       		.uleb128 0xb
+ 954 0115 3B       		.uleb128 0x3b
+ 955 0116 0B       		.uleb128 0xb
+ 956 0117 27       		.uleb128 0x27
+ 957 0118 19       		.uleb128 0x19
+ 958 0119 3C       		.uleb128 0x3c
+ 959 011a 19       		.uleb128 0x19
+ 960 011b 00       		.byte	0
+ 961 011c 00       		.byte	0
+ 962 011d 15       		.uleb128 0x15
+ 963 011e 2E       		.uleb128 0x2e
+ 964 011f 01       		.byte	0x1
+ 965 0120 3F       		.uleb128 0x3f
+ 966 0121 19       		.uleb128 0x19
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 25
+
+
+ 967 0122 03       		.uleb128 0x3
+ 968 0123 0E       		.uleb128 0xe
+ 969 0124 3A       		.uleb128 0x3a
+ 970 0125 0B       		.uleb128 0xb
+ 971 0126 3B       		.uleb128 0x3b
+ 972 0127 0B       		.uleb128 0xb
+ 973 0128 6E       		.uleb128 0x6e
+ 974 0129 0E       		.uleb128 0xe
+ 975 012a 27       		.uleb128 0x27
+ 976 012b 19       		.uleb128 0x19
+ 977 012c 49       		.uleb128 0x49
+ 978 012d 13       		.uleb128 0x13
+ 979 012e 3C       		.uleb128 0x3c
+ 980 012f 19       		.uleb128 0x19
+ 981 0130 01       		.uleb128 0x1
+ 982 0131 13       		.uleb128 0x13
+ 983 0132 00       		.byte	0
+ 984 0133 00       		.byte	0
+ 985 0134 16       		.uleb128 0x16
+ 986 0135 05       		.uleb128 0x5
+ 987 0136 00       		.byte	0
+ 988 0137 49       		.uleb128 0x49
+ 989 0138 13       		.uleb128 0x13
+ 990 0139 00       		.byte	0
+ 991 013a 00       		.byte	0
+ 992 013b 17       		.uleb128 0x17
+ 993 013c 2E       		.uleb128 0x2e
+ 994 013d 01       		.byte	0x1
+ 995 013e 3F       		.uleb128 0x3f
+ 996 013f 19       		.uleb128 0x19
+ 997 0140 03       		.uleb128 0x3
+ 998 0141 0E       		.uleb128 0xe
+ 999 0142 3A       		.uleb128 0x3a
+ 1000 0143 0B       		.uleb128 0xb
+ 1001 0144 3B       		.uleb128 0x3b
+ 1002 0145 0B       		.uleb128 0xb
+ 1003 0146 27       		.uleb128 0x27
+ 1004 0147 19       		.uleb128 0x19
+ 1005 0148 3C       		.uleb128 0x3c
+ 1006 0149 19       		.uleb128 0x19
+ 1007 014a 01       		.uleb128 0x1
+ 1008 014b 13       		.uleb128 0x13
+ 1009 014c 00       		.byte	0
+ 1010 014d 00       		.byte	0
+ 1011 014e 18       		.uleb128 0x18
+ 1012 014f 2E       		.uleb128 0x2e
+ 1013 0150 01       		.byte	0x1
+ 1014 0151 3F       		.uleb128 0x3f
+ 1015 0152 19       		.uleb128 0x19
+ 1016 0153 03       		.uleb128 0x3
+ 1017 0154 0E       		.uleb128 0xe
+ 1018 0155 3A       		.uleb128 0x3a
+ 1019 0156 0B       		.uleb128 0xb
+ 1020 0157 3B       		.uleb128 0x3b
+ 1021 0158 0B       		.uleb128 0xb
+ 1022 0159 27       		.uleb128 0x27
+ 1023 015a 19       		.uleb128 0x19
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 26
+
+
+ 1024 015b 49       		.uleb128 0x49
+ 1025 015c 13       		.uleb128 0x13
+ 1026 015d 3C       		.uleb128 0x3c
+ 1027 015e 19       		.uleb128 0x19
+ 1028 015f 01       		.uleb128 0x1
+ 1029 0160 13       		.uleb128 0x13
+ 1030 0161 00       		.byte	0
+ 1031 0162 00       		.byte	0
+ 1032 0163 19       		.uleb128 0x19
+ 1033 0164 2E       		.uleb128 0x2e
+ 1034 0165 00       		.byte	0
+ 1035 0166 3F       		.uleb128 0x3f
+ 1036 0167 19       		.uleb128 0x19
+ 1037 0168 03       		.uleb128 0x3
+ 1038 0169 0E       		.uleb128 0xe
+ 1039 016a 3A       		.uleb128 0x3a
+ 1040 016b 0B       		.uleb128 0xb
+ 1041 016c 3B       		.uleb128 0x3b
+ 1042 016d 0B       		.uleb128 0xb
+ 1043 016e 27       		.uleb128 0x27
+ 1044 016f 19       		.uleb128 0x19
+ 1045 0170 49       		.uleb128 0x49
+ 1046 0171 13       		.uleb128 0x13
+ 1047 0172 3C       		.uleb128 0x3c
+ 1048 0173 19       		.uleb128 0x19
+ 1049 0174 00       		.byte	0
+ 1050 0175 00       		.byte	0
+ 1051 0176 1A       		.uleb128 0x1a
+ 1052 0177 18       		.uleb128 0x18
+ 1053 0178 00       		.byte	0
+ 1054 0179 00       		.byte	0
+ 1055 017a 00       		.byte	0
+ 1056 017b 00       		.byte	0
+ 1057              		.section	.debug_loc,"",%progbits
+ 1058              	.Ldebug_loc0:
+ 1059              	.LLST0:
+ 1060 0000 0C000000 		.4byte	.LVL1
+ 1061 0004 18000000 		.4byte	.LVL3
+ 1062 0008 0200     		.2byte	0x2
+ 1063 000a 30       		.byte	0x30
+ 1064 000b 9F       		.byte	0x9f
+ 1065 000c 2A000000 		.4byte	.LVL7
+ 1066 0010 50000000 		.4byte	.LVL13
+ 1067 0014 0100     		.2byte	0x1
+ 1068 0016 54       		.byte	0x54
+ 1069 0017 00000000 		.4byte	0
+ 1070 001b 00000000 		.4byte	0
+ 1071              	.LLST1:
+ 1072 001f 0C000000 		.4byte	.LVL1
+ 1073 0023 18000000 		.4byte	.LVL3
+ 1074 0027 0600     		.2byte	0x6
+ 1075 0029 9E       		.byte	0x9e
+ 1076 002a 04       		.uleb128 0x4
+ 1077 002b 00000000 		.4byte	0
+ 1078 002f 40000000 		.4byte	.LVL11
+ 1079 0033 43000000 		.4byte	.LVL12-1
+ 1080 0037 0100     		.2byte	0x1
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 27
+
+
+ 1081 0039 50       		.byte	0x50
+ 1082 003a 00000000 		.4byte	0
+ 1083 003e 00000000 		.4byte	0
+ 1084              	.LLST2:
+ 1085 0042 00000000 		.4byte	.LVL15
+ 1086 0046 0A000000 		.4byte	.LVL17
+ 1087 004a 0100     		.2byte	0x1
+ 1088 004c 50       		.byte	0x50
+ 1089 004d 0A000000 		.4byte	.LVL17
+ 1090 0051 2A000000 		.4byte	.LFE64
+ 1091 0055 0400     		.2byte	0x4
+ 1092 0057 F3       		.byte	0xf3
+ 1093 0058 01       		.uleb128 0x1
+ 1094 0059 50       		.byte	0x50
+ 1095 005a 9F       		.byte	0x9f
+ 1096 005b 00000000 		.4byte	0
+ 1097 005f 00000000 		.4byte	0
+ 1098              	.LLST3:
+ 1099 0063 00000000 		.4byte	.LVL15
+ 1100 0067 0A000000 		.4byte	.LVL17
+ 1101 006b 0100     		.2byte	0x1
+ 1102 006d 51       		.byte	0x51
+ 1103 006e 0A000000 		.4byte	.LVL17
+ 1104 0072 18000000 		.4byte	.LVL19
+ 1105 0076 0100     		.2byte	0x1
+ 1106 0078 54       		.byte	0x54
+ 1107 0079 18000000 		.4byte	.LVL19
+ 1108 007d 22000000 		.4byte	.LVL22
+ 1109 0081 0100     		.2byte	0x1
+ 1110 0083 56       		.byte	0x56
+ 1111 0084 22000000 		.4byte	.LVL22
+ 1112 0088 2A000000 		.4byte	.LFE64
+ 1113 008c 0100     		.2byte	0x1
+ 1114 008e 54       		.byte	0x54
+ 1115 008f 00000000 		.4byte	0
+ 1116 0093 00000000 		.4byte	0
+ 1117              	.LLST4:
+ 1118 0097 00000000 		.4byte	.LVL15
+ 1119 009b 0A000000 		.4byte	.LVL17
+ 1120 009f 0100     		.2byte	0x1
+ 1121 00a1 52       		.byte	0x52
+ 1122 00a2 0A000000 		.4byte	.LVL17
+ 1123 00a6 2A000000 		.4byte	.LFE64
+ 1124 00aa 0100     		.2byte	0x1
+ 1125 00ac 57       		.byte	0x57
+ 1126 00ad 00000000 		.4byte	0
+ 1127 00b1 00000000 		.4byte	0
+ 1128              	.LLST5:
+ 1129 00b5 06000000 		.4byte	.LVL16
+ 1130 00b9 0A000000 		.4byte	.LVL17
+ 1131 00bd 0200     		.2byte	0x2
+ 1132 00bf 30       		.byte	0x30
+ 1133 00c0 9F       		.byte	0x9f
+ 1134 00c1 0A000000 		.4byte	.LVL17
+ 1135 00c5 2A000000 		.4byte	.LFE64
+ 1136 00c9 0100     		.2byte	0x1
+ 1137 00cb 55       		.byte	0x55
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 28
+
+
+ 1138 00cc 00000000 		.4byte	0
+ 1139 00d0 00000000 		.4byte	0
+ 1140              	.LLST6:
+ 1141 00d4 00000000 		.4byte	.LVL23
+ 1142 00d8 0A000000 		.4byte	.LVL25
+ 1143 00dc 0100     		.2byte	0x1
+ 1144 00de 50       		.byte	0x50
+ 1145 00df 0A000000 		.4byte	.LVL25
+ 1146 00e3 38000000 		.4byte	.LFE65
+ 1147 00e7 0400     		.2byte	0x4
+ 1148 00e9 F3       		.byte	0xf3
+ 1149 00ea 01       		.uleb128 0x1
+ 1150 00eb 50       		.byte	0x50
+ 1151 00ec 9F       		.byte	0x9f
+ 1152 00ed 00000000 		.4byte	0
+ 1153 00f1 00000000 		.4byte	0
+ 1154              	.LLST7:
+ 1155 00f5 00000000 		.4byte	.LVL23
+ 1156 00f9 0A000000 		.4byte	.LVL25
+ 1157 00fd 0100     		.2byte	0x1
+ 1158 00ff 51       		.byte	0x51
+ 1159 0100 0A000000 		.4byte	.LVL25
+ 1160 0104 26000000 		.4byte	.LVL32
+ 1161 0108 0100     		.2byte	0x1
+ 1162 010a 57       		.byte	0x57
+ 1163 010b 26000000 		.4byte	.LVL32
+ 1164 010f 30000000 		.4byte	.LVL34
+ 1165 0113 0100     		.2byte	0x1
+ 1166 0115 53       		.byte	0x53
+ 1167 0116 30000000 		.4byte	.LVL34
+ 1168 011a 34000000 		.4byte	.LVL35
+ 1169 011e 0100     		.2byte	0x1
+ 1170 0120 57       		.byte	0x57
+ 1171 0121 00000000 		.4byte	0
+ 1172 0125 00000000 		.4byte	0
+ 1173              	.LLST8:
+ 1174 0129 00000000 		.4byte	.LVL23
+ 1175 012d 0A000000 		.4byte	.LVL25
+ 1176 0131 0100     		.2byte	0x1
+ 1177 0133 52       		.byte	0x52
+ 1178 0134 0A000000 		.4byte	.LVL25
+ 1179 0138 38000000 		.4byte	.LFE65
+ 1180 013c 0100     		.2byte	0x1
+ 1181 013e 54       		.byte	0x54
+ 1182 013f 00000000 		.4byte	0
+ 1183 0143 00000000 		.4byte	0
+ 1184              	.LLST9:
+ 1185 0147 06000000 		.4byte	.LVL24
+ 1186 014b 0A000000 		.4byte	.LVL25
+ 1187 014f 0200     		.2byte	0x2
+ 1188 0151 30       		.byte	0x30
+ 1189 0152 9F       		.byte	0x9f
+ 1190 0153 0A000000 		.4byte	.LVL25
+ 1191 0157 38000000 		.4byte	.LFE65
+ 1192 015b 0100     		.2byte	0x1
+ 1193 015d 56       		.byte	0x56
+ 1194 015e 00000000 		.4byte	0
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 29
+
+
+ 1195 0162 00000000 		.4byte	0
+ 1196              	.LLST10:
+ 1197 0166 0E000000 		.4byte	.LVL26
+ 1198 016a 15000000 		.4byte	.LVL27-1
+ 1199 016e 0100     		.2byte	0x1
+ 1200 0170 50       		.byte	0x50
+ 1201 0171 1C000000 		.4byte	.LVL29
+ 1202 0175 24000000 		.4byte	.LVL31
+ 1203 0179 0200     		.2byte	0x2
+ 1204 017b 3A       		.byte	0x3a
+ 1205 017c 9F       		.byte	0x9f
+ 1206 017d 24000000 		.4byte	.LVL31
+ 1207 0181 30000000 		.4byte	.LVL34
+ 1208 0185 0100     		.2byte	0x1
+ 1209 0187 55       		.byte	0x55
+ 1210 0188 00000000 		.4byte	0
+ 1211 018c 00000000 		.4byte	0
+ 1212              		.section	.debug_aranges,"",%progbits
+ 1213 0000 2C000000 		.4byte	0x2c
+ 1214 0004 0200     		.2byte	0x2
+ 1215 0006 00000000 		.4byte	.Ldebug_info0
+ 1216 000a 04       		.byte	0x4
+ 1217 000b 00       		.byte	0
+ 1218 000c 0000     		.2byte	0
+ 1219 000e 0000     		.2byte	0
+ 1220 0010 00000000 		.4byte	.LFB63
+ 1221 0014 70000000 		.4byte	.LFE63-.LFB63
+ 1222 0018 00000000 		.4byte	.LFB64
+ 1223 001c 2A000000 		.4byte	.LFE64-.LFB64
+ 1224 0020 00000000 		.4byte	.LFB65
+ 1225 0024 38000000 		.4byte	.LFE65-.LFB65
+ 1226 0028 00000000 		.4byte	0
+ 1227 002c 00000000 		.4byte	0
+ 1228              		.section	.debug_ranges,"",%progbits
+ 1229              	.Ldebug_ranges0:
+ 1230 0000 00000000 		.4byte	.LFB63
+ 1231 0004 70000000 		.4byte	.LFE63
+ 1232 0008 00000000 		.4byte	.LFB64
+ 1233 000c 2A000000 		.4byte	.LFE64
+ 1234 0010 00000000 		.4byte	.LFB65
+ 1235 0014 38000000 		.4byte	.LFE65
+ 1236 0018 00000000 		.4byte	0
+ 1237 001c 00000000 		.4byte	0
+ 1238              		.section	.debug_line,"",%progbits
+ 1239              	.Ldebug_line0:
+ 1240 0000 0A020000 		.section	.debug_str,"MS",%progbits,1
+ 1240      02009801 
+ 1240      00000201 
+ 1240      FB0E0D00 
+ 1240      01010101 
+ 1241              	.LASF26:
+ 1242 0000 55415254 		.ascii	"UART_1_Start\000"
+ 1242      5F315F53 
+ 1242      74617274 
+ 1242      00
+ 1243              	.LASF9:
+ 1244 000d 5F5F696E 		.ascii	"__int32_t\000"
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 30
+
+
+ 1244      7433325F 
+ 1244      7400
+ 1245              	.LASF27:
+ 1246 0017 4144435F 		.ascii	"ADC_Battery_Start\000"
+ 1246      42617474 
+ 1246      6572795F 
+ 1246      53746172 
+ 1246      7400
+ 1247              	.LASF3:
+ 1248 0029 73686F72 		.ascii	"short unsigned int\000"
+ 1248      7420756E 
+ 1248      7369676E 
+ 1248      65642069 
+ 1248      6E7400
+ 1249              	.LASF10:
+ 1250 003c 696E7433 		.ascii	"int32_t\000"
+ 1250      325F7400 
+ 1251              	.LASF24:
+ 1252 0044 5F726561 		.ascii	"_read\000"
+ 1252      6400
+ 1253              	.LASF15:
+ 1254 004a 666C6F61 		.ascii	"float\000"
+ 1254      7400
+ 1255              	.LASF22:
+ 1256 0050 66696C65 		.ascii	"file\000"
+ 1256      00
+ 1257              	.LASF1:
+ 1258 0055 756E7369 		.ascii	"unsigned char\000"
+ 1258      676E6564 
+ 1258      20636861 
+ 1258      7200
+ 1259              	.LASF13:
+ 1260 0063 696E7431 		.ascii	"int16\000"
+ 1260      3600
+ 1261              	.LASF5:
+ 1262 0069 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1262      20756E73 
+ 1262      69676E65 
+ 1262      6420696E 
+ 1262      7400
+ 1263              	.LASF41:
+ 1264 007b 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1264      52784275 
+ 1264      66666572 
+ 1264      00
+ 1265              	.LASF16:
+ 1266 0088 646F7562 		.ascii	"double\000"
+ 1266      6C6500
+ 1267              	.LASF40:
+ 1268 008f 6D61696E 		.ascii	"main\000"
+ 1268      00
+ 1269              	.LASF14:
+ 1270 0094 666C6F61 		.ascii	"float32\000"
+ 1270      74333200 
+ 1271              	.LASF12:
+ 1272 009c 75696E74 		.ascii	"uint32\000"
+ 1272      333200
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 31
+
+
+ 1273              	.LASF34:
+ 1274 00a3 55415254 		.ascii	"UART_1_PutChar\000"
+ 1274      5F315F50 
+ 1274      75744368 
+ 1274      617200
+ 1275              	.LASF8:
+ 1276 00b2 756E7369 		.ascii	"unsigned int\000"
+ 1276      676E6564 
+ 1276      20696E74 
+ 1276      00
+ 1277              	.LASF35:
+ 1278 00bf 4144435F 		.ascii	"ADC_Battery_GetResult16\000"
+ 1278      42617474 
+ 1278      6572795F 
+ 1278      47657452 
+ 1278      6573756C 
+ 1279              	.LASF7:
+ 1280 00d7 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1280      206C6F6E 
+ 1280      6720756E 
+ 1280      7369676E 
+ 1280      65642069 
+ 1281              	.LASF37:
+ 1282 00ee 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1282      4320342E 
+ 1282      392E3320 
+ 1282      32303135 
+ 1282      30333033 
+ 1283 0121 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 1283      20726576 
+ 1283      6973696F 
+ 1283      6E203232 
+ 1283      31323230 
+ 1284 0154 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1284      66756E63 
+ 1284      74696F6E 
+ 1284      2D736563 
+ 1284      74696F6E 
+ 1285              	.LASF30:
+ 1286 017c 4144435F 		.ascii	"ADC_Battery_CountsTo_Volts\000"
+ 1286      42617474 
+ 1286      6572795F 
+ 1286      436F756E 
+ 1286      7473546F 
+ 1287              	.LASF29:
+ 1288 0197 4144435F 		.ascii	"ADC_Battery_IsEndConversion\000"
+ 1288      42617474 
+ 1288      6572795F 
+ 1288      4973456E 
+ 1288      64436F6E 
+ 1289              	.LASF42:
+ 1290 01b3 5F5F6275 		.ascii	"__builtin_puts\000"
+ 1290      696C7469 
+ 1290      6E5F7075 
+ 1290      747300
+ 1291              	.LASF21:
+ 1292 01c2 766F6C74 		.ascii	"volts\000"
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 32
+
+
+ 1292      7300
+ 1293              	.LASF19:
+ 1294 01c8 6C6F6E67 		.ascii	"long double\000"
+ 1294      20646F75 
+ 1294      626C6500 
+ 1295              	.LASF23:
+ 1296 01d4 5F777269 		.ascii	"_write\000"
+ 1296      746500
+ 1297              	.LASF18:
+ 1298 01db 73697A65 		.ascii	"sizetype\000"
+ 1298      74797065 
+ 1298      00
+ 1299              	.LASF6:
+ 1300 01e4 6C6F6E67 		.ascii	"long long int\000"
+ 1300      206C6F6E 
+ 1300      6720696E 
+ 1300      7400
+ 1301              	.LASF32:
+ 1302 01f2 42617474 		.ascii	"BatteryLed_Write\000"
+ 1302      6572794C 
+ 1302      65645F57 
+ 1302      72697465 
+ 1302      00
+ 1303              	.LASF38:
+ 1304 0203 6D61696E 		.ascii	"main.c\000"
+ 1304      2E6300
+ 1305              	.LASF17:
+ 1306 020a 63686172 		.ascii	"char\000"
+ 1306      00
+ 1307              	.LASF39:
+ 1308 020f 433A5C55 		.ascii	"C:\\Users\\asentaja\\Documents\\Zumo.release04\\Zum"
+ 1308      73657273 
+ 1308      5C617365 
+ 1308      6E74616A 
+ 1308      615C446F 
+ 1309 023d 6F30315C 		.ascii	"o01\\ZumoBot.cydsn\000"
+ 1309      5A756D6F 
+ 1309      426F742E 
+ 1309      63796473 
+ 1309      6E00
+ 1310              	.LASF20:
+ 1311 024f 61646372 		.ascii	"adcresult\000"
+ 1311      6573756C 
+ 1311      7400
+ 1312              	.LASF31:
+ 1313 0259 7072696E 		.ascii	"printf\000"
+ 1313      746600
+ 1314              	.LASF25:
+ 1315 0260 636F756E 		.ascii	"count\000"
+ 1315      7400
+ 1316              	.LASF2:
+ 1317 0266 73686F72 		.ascii	"short int\000"
+ 1317      7420696E 
+ 1317      7400
+ 1318              	.LASF11:
+ 1319 0270 75696E74 		.ascii	"uint8\000"
+ 1319      3800
+ARM GAS  C:\Users\asentaja\AppData\Local\Temp\cchb7DUf.s 			page 33
+
+
+ 1320              	.LASF4:
+ 1321 0276 6C6F6E67 		.ascii	"long int\000"
+ 1321      20696E74 
+ 1321      00
+ 1322              	.LASF43:
+ 1323 027f 70757473 		.ascii	"puts\000"
+ 1323      00
+ 1324              	.LASF0:
+ 1325 0284 7369676E 		.ascii	"signed char\000"
+ 1325      65642063 
+ 1325      68617200 
+ 1326              	.LASF28:
+ 1327 0290 4144435F 		.ascii	"ADC_Battery_StartConvert\000"
+ 1327      42617474 
+ 1327      6572795F 
+ 1327      53746172 
+ 1327      74436F6E 
+ 1328              	.LASF33:
+ 1329 02a9 43794465 		.ascii	"CyDelay\000"
+ 1329      6C617900 
+ 1330              	.LASF36:
+ 1331 02b1 55415254 		.ascii	"UART_1_GetChar\000"
+ 1331      5F315F47 
+ 1331      65744368 
+ 1331      617200
+ 1332              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
