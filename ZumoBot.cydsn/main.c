@@ -211,7 +211,7 @@ int main()
 //*/
 
 
-/*//reflectance//
+//reflectance//
 int main()
 {
     struct sensors_ ref;
@@ -224,6 +224,22 @@ int main()
     reflectance_start();
 
     IR_led_Write(1);
+   
+        
+        //reflectance_digital(&dig);
+        
+      /*  motor_start();
+        motor_forward (50,2000);
+        if ( dig.r3 == 1 || dig.r1==1 || dig.l1==1 || dig.l3==1 ) {
+            tankturn_l ( 100 , 500 );
+        }
+        
+       
+        
+   
+        motor_stop ();
+        
+        */
     for(;;)
     {
         reflectance_read(&ref);
@@ -231,12 +247,40 @@ int main()
         reflectance_digital(&dig);      //print out 0 or 1 according to results of reflectance period
         printf("%d %d %d %d \r\n", dig.l3, dig.l1, dig.r1, dig.r3);        //print out 0 or 1 according to results of reflectance period
         
-        CyDelay(500);
+        motor_start();
+        
+      
+               
+        if ( dig.l1 == 0 || dig.r1 == 0 || dig.l3==0 || dig.r3==0) {
+           
+            motor_backward ( 250, 100 );
+                 
+        }
+        
+        if ( dig.r3== 0 ) {
+            tankturn_l ( 150 , 200 );
+            CyDelayUs(50);
+        }
+        
+        if ( dig.l3 ==0 ) {
+            tankturn_r ( 150, 200 );
+            CyDelayUs(50);
+        }
+        
+        else {
+            
+            motor_forward ( 150 , 200 );
+            
+        }
+        
+        
+        
+       CyDelayUs(100);
     }
 }   
 //*/
 
-  //motor//
+/*  //motor//
 int main()
 {
     CyGlobalIntEnable; 
@@ -271,6 +315,8 @@ int main()
 
     }
 }
+
+*/
 //My functions//
 
     void tankturn_l(uint8 speed, uint32 delay)
@@ -289,7 +335,7 @@ int main()
     PWM_WriteCompare2(speed); 
     CyDelay(delay);
 }   
-//*/
+
     
 
 /*//gyroscope//

@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Zumo\ZumoBot\Source Files\main.c">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Zumo">
 <ExpandedNodeIds>
 <v>Zumo</v>
 <v>Zumo\ZumoBot</v>
@@ -28,6 +28,7 @@
 <v>Zumo\ZumoBot\ZumoBot.cydwr\Directives</v>
 <v>Zumo\ZumoBot\ZumoBot.cydwr\Flash Security</v>
 <v>Zumo\ZumoBot\ZumoBot.cydwr\EEPROM</v>
+<v>Zumo\ZumoBot\Header Files</v>
 <v>Zumo\ZumoBot\Header Files\Accel_magnet.h</v>
 <v>Zumo\ZumoBot\Header Files\Ambient.h</v>
 <v>Zumo\ZumoBot\Header Files\Beep.h</v>
@@ -406,6 +407,8 @@
 <name v=".\ZumoBot.cydsn\TopDesign\TopDesign.cysch" />
 <name v=".\ZumoBot.cydsn\main.c" />
 <name v=".\ZumoBot.cydsn\ZumoLibrary\Motor.c" />
+<name v=".\ZumoBot.cydsn\ZumoLibrary\Reflectance.c" />
+<name v=".\ZumoBot.cydsn\ZumoLibrary\Reflectance.h" />
 </OpenDocs>
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
 
@@ -413,7 +416,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="890, 417" SelectedTabbedMdiWindow="45b40627-d1f3-4037-9f6e-e750c16392a5"><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="8b3eaa98-a49b-4cd9-9711-b7d65579c487" /><DocumentWindow Key="bec3ea5c-e897-40fe-84ba-862c17a058a1" Guid="37e78d2a-3008-4e05-951c-924ecbcbbe55" /><DocumentWindow Key="d846540b-2542-4f98-88cb-f64726ed4ca8" Guid="45b40627-d1f3-4037-9f6e-e750c16392a5" /><DocumentWindow Key="9f563043-23ac-4059-a2be-5772b545f390" Guid="e090a395-eaaf-4f43-adc2-f89de24f65e9" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="890, 457" SelectedTabbedMdiWindow="79688f56-3166-40e2-9568-247c88cfea12"><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="8b3eaa98-a49b-4cd9-9711-b7d65579c487" /><DocumentWindow Key="b6a54f97-066c-4008-8713-b3e48625bc74" Guid="2a00b633-60ff-4403-930c-3cdce4c62d93" /><DocumentWindow Key="36665ab0-39de-45e6-8b8e-9cbf93035a50" Guid="79688f56-3166-40e2-9568-247c88cfea12" /><DocumentWindow Key="9373c19b-f970-4d85-8214-ad75975cdda5" Guid="5d86839d-dcd4-4e57-aaf0-5b671b73958e" /><DocumentWindow Key="77b927a8-87e1-448c-be88-1338083e68f1" Guid="691d3337-3263-4ab9-b24b-1d4151d63ac9" /><DocumentWindow Key="df2a92a8-507c-4a20-aa8b-4a9367c395e6" Guid="ae1e5ba7-fd5c-47c3-84db-8b8fd5d7bd9a" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
