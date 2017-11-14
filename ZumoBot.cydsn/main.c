@@ -41,7 +41,8 @@
 #include "IR.h"
 #include "Ambient.h"
 #include "Beep.h"
-
+void tankturn_l(uint8 speed, uint32 delay);
+void tankturn_r(uint8 speed, uint32 delay);
 int rread(void);
 
 /**
@@ -51,8 +52,13 @@ int rread(void);
 */
 
 
+<<<<<<< HEAD
 //battery level//
 /*int main()
+=======
+/* //battery level//
+int main()
+>>>>>>> b624debbc1cb61744c43a942a04a6276bc9fc33d
 {
     CyGlobalIntEnable; 
     UART_1_Start();
@@ -224,8 +230,27 @@ int main()
     reflectance_start();
 
     IR_led_Write(1);
+<<<<<<< HEAD
     motor_start();
     motor_forward(0,1000);
+=======
+   
+        
+        //reflectance_digital(&dig);
+        
+      /*  motor_start();
+        motor_forward (50,2000);
+        if ( dig.r3 == 1 || dig.r1==1 || dig.l1==1 || dig.l3==1 ) {
+            tankturn_l ( 100 , 500 );
+        }
+        
+       
+        
+   
+        motor_stop ();
+        
+        */
+>>>>>>> b624debbc1cb61744c43a942a04a6276bc9fc33d
     for(;;)
     {
         reflectance_read(&ref);
@@ -234,6 +259,7 @@ int main()
         printf("%d %d %d %d \r\n", dig.l3, dig.l1, dig.r1, dig.r3);        //print out 0 or 1 according to results of reflectance period
 
         
+<<<<<<< HEAD
         if ( dig.l1 == 0 && dig.r1 == 0 ) 
         {
             motor_forward ( 50, 50 );
@@ -270,6 +296,33 @@ int main()
         }
         
         
+=======
+        motor_start();
+        
+      
+               
+        if ( dig.l1 == 0 || dig.r1 == 0 || dig.l3==0 || dig.r3==0) {
+           
+            motor_backward ( 250, 100 );
+                 
+        }
+        
+        if ( dig.r3== 0 ) {
+            tankturn_l ( 150 , 200 );
+            CyDelayUs(50);
+        }
+        
+        if ( dig.l3 ==0 ) {
+            tankturn_r ( 150, 200 );
+            CyDelayUs(50);
+        }
+        
+        else {
+            
+            motor_forward ( 150 , 200 );
+            
+        }
+>>>>>>> b624debbc1cb61744c43a942a04a6276bc9fc33d
         
         
         
@@ -280,7 +333,7 @@ int main()
  
 //*/
 
- /* //motor//
+/*  //motor//
 int main()
 {
     CyGlobalIntEnable; 
@@ -288,10 +341,25 @@ int main()
 
     motor_start();              // motor start
 
-    motor_forward(100,2000);     // moving forward
-    motor_turn(200,50,2000);     // turn
-    motor_turn(50,200,2000);     // turn
-    motor_backward(100,2000);    // movinb backward
+    motor_forward(0,10000); //delay at start
+    motor_forward(150,3340);     // moving forward
+    tankturn_r(90, 570);
+    motor_forward(150,2850);
+    tankturn_r(90,570);
+    motor_forward(150,3220);
+    tankturn_r(90,1000);
+    motor_forward(50,50);
+    motor_turn(93,109,4950);
+    
+   // motor_turn(0,50,100);     // turn
+    //motor_turn(0,200,100);     // turn
+   
+    //motor_backward(100,2000);   // moving backward
+    
+ // tankturn_l(90, 575);   // tankturn left 90 degree //
+ // tankturn_r(90, 575);   // tankturn right 90 degree //
+
+    
        
     motor_stop();               // motor stop
     
@@ -300,7 +368,27 @@ int main()
 
     }
 }
-//*/
+
+*/
+//My functions//
+
+    void tankturn_l(uint8 speed, uint32 delay)
+{
+    MotorDirLeft_Write(1);      // set LeftMotor backward mode
+    MotorDirRight_Write(0);     // set RightMotor forward mode
+    PWM_WriteCompare1(speed); 
+    PWM_WriteCompare2(speed); 
+    CyDelay(delay);
+}
+    void tankturn_r(uint8 speed, uint32 delay)
+{
+    MotorDirLeft_Write(0);      // set LeftMotor forward mode
+    MotorDirRight_Write(1);     // set RightMotor backward mode
+    PWM_WriteCompare1(speed); 
+    PWM_WriteCompare2(speed); 
+    CyDelay(delay);
+}   
+
     
 
 /*//gyroscope//
