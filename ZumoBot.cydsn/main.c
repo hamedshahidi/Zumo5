@@ -52,7 +52,7 @@ int rread(void);
 
 
 //battery level//
-int main()
+/*int main()
 {
     CyGlobalIntEnable; 
     UART_1_Start();
@@ -210,9 +210,10 @@ int main()
 //*/
 
 
-/*//reflectance//
+//reflectance//
 int main()
 {
+    int counter = 0;
     struct sensors_ ref;
     struct sensors_ dig;
     CyGlobalIntEnable; 
@@ -223,16 +224,60 @@ int main()
     reflectance_start();
 
     IR_led_Write(1);
+    motor_start();
+    motor_forward(0,1000);
     for(;;)
     {
         reflectance_read(&ref);
         printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);       //print out each period of reflectance sensors
         reflectance_digital(&dig);      //print out 0 or 1 according to results of reflectance period
         printf("%d %d %d %d \r\n", dig.l3, dig.l1, dig.r1, dig.r3);        //print out 0 or 1 according to results of reflectance period
+
         
-        CyDelay(500);
+        if ( dig.l1 == 0 && dig.r1 == 0 ) 
+        {
+            motor_forward ( 50, 50 );
+        }
+        
+        else if ( dig.l1==0 && dig.r1==1 )              
+        {
+            motor_turn ( 10,100,50 );             /* it will turn left*/
+        }
+        
+        else if ( dig.l1==1 && dig.r1==0) 
+        {
+            motor_turn ( 100,10,50 );             /* it will turn right*/
+        }
+        
+        
+        else if ( dig.l3==0 && dig.l1==1 )          /* seeing line with left sensors and turning left slowly */
+        {
+            motor_turn ( 10, 100, 80 );
+        }
+        else if ( dig.r1==1 && dig.r3==0 )          /* seeing line with right sensors and turning left slowly*/
+        {
+            motor_turn ( 100, 10 ,80);
+        }
+        
+        else if ( dig.l3==0 && dig.l1==0 && dig.r1==0 && dig.r3==0 )        /* stop at the finish line */
+        {
+            motor_stop();
+        }
+               
+        else 
+        {
+            motor_turn ( 10,50,200 );
+        }
+        
+        
+        
+        
+        
+       CyDelayUs(100);
     }
 }   
+
+ 
 //*/
 
  /* //motor//

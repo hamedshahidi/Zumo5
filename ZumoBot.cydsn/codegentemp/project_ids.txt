@@ -1,5 +1,5 @@
-C:\Users\asentaja\Documents\Zumo.release04\Zumo01\ZumoBot.cydsn\ZumoBot.cyprj|41943e4f-42ec-40fe-a3a4-58a8ba17694f
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|1ee7367f-48ca-43d9-8dfc-cfd95d4b8b9f
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|87cbbdb2-e844-4872-bce3-e59f46b865d1
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|45e68d43-6e0b-4c89-9c2e-ac7670119c2f
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|01167b45-b6a5-4b72-8e18-e1e3e2d59e07
+D:\Metropolia UAS\Intro Programming\Git\Repo\Zumo5\ZumoBot.cydsn\ZumoBot.cyprj|f905c44a-0c9a-4675-a1e8-5a8e0dd31fef
+D:\Metropolia UAS\Intro Programming\PSoCCreator\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|fcaea38b-40ff-4a36-b38a-b67ef62850a9
+D:\Metropolia UAS\Intro Programming\PSoCCreator\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|fd99eb4b-7ee4-4f54-9580-c648b312b522
+D:\Metropolia UAS\Intro Programming\PSoCCreator\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|93798361-e4e5-4ea5-af3a-92784a95d341
+D:\Metropolia UAS\Intro Programming\PSoCCreator\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|4e98678e-9815-4e8b-aace-44fc27959d00
